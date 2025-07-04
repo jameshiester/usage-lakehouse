@@ -34,6 +34,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DescribeTags",
+      "elasticloadbalancing:DescribeListenerAttributes",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
       "kms:CreateKey",
@@ -72,10 +73,18 @@ data "aws_iam_policy_document" "SampleApp" {
   }
   statement {
     actions = [
-      "ec2:DetachNetworkInterface"
+      "ec2:DetachNetworkInterface",
     ]
     resources = [
       "arn:aws:ec2:${var.Region}:${data.aws_caller_identity.current.account_id}:instance/*"
+    ]
+  }
+  statement {
+    actions = [
+      "ec2:DeleteNetworkAclEntry",
+    ]
+    resources = [
+      "arn:aws:ec2:${var.Region}:${data.aws_caller_identity.current.account_id}:network-acl/*"
     ]
   }
   statement {
