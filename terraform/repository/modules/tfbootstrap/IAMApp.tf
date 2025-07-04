@@ -20,6 +20,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:DisassociateAddress",
       "ec2:DisassociateRouteTable",
       "ec2:ReleaseAddress",
+      "ec2:DescribeAvailabilityZones",
       "ecr:CreateRepository",
       "ecr:DescribeRepositories",
       "ecr:GetAuthorizationToken",
