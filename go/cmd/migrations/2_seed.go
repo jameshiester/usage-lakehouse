@@ -379,7 +379,7 @@ func init() {
 			Interval:      true,
 			Meter:         true,
 			Summary:       true,
-			Name:          "Net Interval Usage Summary",
+			Name:          "Net Interval Usage Summary Across Meters",
 			Description:   "Net Interval Usage Summary Across Meters",
 		},
 	}
@@ -578,7 +578,7 @@ func init() {
 		fmt.Println("seeding power_region_usage_transaction_product_transfer_detail_type table...")
 		for _, powerRegionUsageTransactionProductTransferDetailType := range powerRegionUsageTransactionProductTransferDetailTypes {
 			_, err := db.Exec(`
-				INSERT INTO public.power_region_usage_transaction_product_transfer_detail_type (code, name, power_region_id, interval, meter, summary, description)
+				INSERT INTO public.power_region_usage_transaction_product_transfer_detail_type (code, name, power_region_id, is_interval, is_meter, is_summary, description)
 				VALUES (?, ?, ?, ?, ?, ?, ?)
 			`, powerRegionUsageTransactionProductTransferDetailType.Code, powerRegionUsageTransactionProductTransferDetailType.Name, powerRegionUsageTransactionProductTransferDetailType.PowerRegionID, powerRegionUsageTransactionProductTransferDetailType.Interval, powerRegionUsageTransactionProductTransferDetailType.Meter, powerRegionUsageTransactionProductTransferDetailType.Summary, powerRegionUsageTransactionProductTransferDetailType.Description)
 			if err != nil {

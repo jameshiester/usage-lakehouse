@@ -418,23 +418,20 @@ EXECUTE FUNCTION public.set_updated_dttm();
 CREATE TABLE IF NOT EXISTS public.power_region_usage_transaction_product_transfer_detail_type (
     power_region_id UUID NOT NULL,
 	code VARCHAR(64) NOT NULL,
+    name VARCHAR(64) not null,
 	description VARCHAR(300) NOT NULL,
     is_interval BOOLEAN NOT NULL,
     is_summary BOOLEAN NOT NULL,
     is_meter BOOLEAN NOT NULL,
 	created_dttm timestamp NOT NULL,
 	updated_dttm timestamp NOT NULL,
-    CONSTRAINT fk_transaction_type_code
-        FOREIGN KEY(transaction_type_code)
-        REFERENCES public.transaction_type(code)
-        ON DELETE CASCADE,
     CONSTRAINT fk_power_region_id
         FOREIGN KEY(power_region_id)
         REFERENCES public.power_region(id)
         ON DELETE CASCADE,
     CONSTRAINT pk_power_region_usage_transaction_product_transfer_detail_type
         PRIMARY KEY (code, power_region_id),
-    CONSTRAINT unique_power_region_usage_transaction_product_transfer_detail_type_name_power_region 
+    CONSTRAINT unique_power_region_usage_transaction_product_transfer_detail_type_name
         UNIQUE (name, power_region_id)
 );
 
