@@ -71,7 +71,9 @@ data "aws_iam_policy_document" "SampleApp" {
   statement {
     actions = [
       "secretsmanager:CreateSecret",
-      "secretsmanager:ListSecrets"
+      "secretsmanager:ListSecrets",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:TagResource"
     ]
     resources = ["*"]
   }
