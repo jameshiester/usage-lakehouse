@@ -1,4 +1,4 @@
-name: "Review and deploy Development environment"
+name: "Deploy Dev"
 run-name: ${{ github.actor}} is running a Terraform review and deploy to Dev 🚀
 on:
   push:

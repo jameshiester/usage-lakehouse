@@ -120,6 +120,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:AssociateRouteTable",
       "ec2:CreateRoute",
       "ec2:CreateRouteTable",
+      "ec2:DeleteRoute",
       "ec2:DeleteRouteTable"
     ]
     resources = [
@@ -269,6 +270,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "iam:ListRolePolicies",
       "iam:PassRole",
       "iam:PutRolePolicy",
+      "iam:DetachRolePolicy",
       "iam:TagRole"
     ]
     resources = [
