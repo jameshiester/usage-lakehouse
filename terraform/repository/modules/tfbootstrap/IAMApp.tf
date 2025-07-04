@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:DescribeNetworkInterfaces",
       "ec2:DescribeRouteTables",
       "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSecurityGroupRules",
       "ec2:DescribeSubnets",
       "ec2:DescribeVpcs",
       "ec2:DisassociateAddress",
@@ -69,7 +70,8 @@ data "aws_iam_policy_document" "SampleApp" {
   }
   statement {
     actions = [
-      "secretsmanager:CreateSecret"
+      "secretsmanager:CreateSecret",
+      "secretsmanager:ListSecrets"
     ]
     resources = ["*"]
   }
