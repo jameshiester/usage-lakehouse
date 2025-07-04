@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  go:
+    image: go-api
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
   db:
     image: postgres-custom
     restart: always
@@ -11,3 +23,8 @@ services:
       POSTGRESQL_SHARED_PRELOAD_LIBRARIES: pg_partman_bgw,pgaudit
     ports:
       - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

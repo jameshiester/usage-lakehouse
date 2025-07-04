@@ -1,21 +1,17 @@
 provider "aws" {
-  region = local.region
+  region = var.Region
 }
 
 data "aws_caller_identity" "current" {}
 data "aws_availability_zones" "available" {}
 
 locals {
-  name    = "usage-primary"
-  region  = "eu-west-1"
-  region2 = "eu-central-1"
-
-  vpc_cidr = "10.0.0.0/16"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  azs = var.AZS
 
   tags = {
-    Name       = local.name
-    Example    = local.name
+    Environment = var.EnvTag
+    EnvCode     = var.EnvCode
+    Solution    = var.SolTag
   }
 }
 
@@ -24,28 +20,28 @@ locals {
 ################################################################################
 
 module "db" {
-  source = "terraform-aws-modules/terraform-aws-rds"
+  source  = "terraform-aws-modules/rds/aws"
   version = "~> 6"
 
-  identifier = local.name
+  identifier = format("%s%s%s", var.Prefix, "rds", var.EnvCode)
 
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine                   = "postgres"
-  engine_version           = "14"
+  engine_version           = "17.5"
   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
-  family                   = "postgres14" # DB parameter group
-  major_engine_version     = "14"         # DB option group
-  instance_class           = "db.t4g.micro"
+  family                   = "postgres17" # DB parameter group
+  major_engine_version     = "17"         # DB option group
+  instance_class           = var.DBInstanceSize
 
-  allocated_storage     = 20
-  max_allocated_storage = 100
+  allocated_storage     = var.DBInstanceAllocatedStorage
+  max_allocated_storage = var.DBInstanceMaxAllocatedStorage
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
   # user cannot be used as it is a reserved word used by the engine"
-  db_name  = "postgres"
-  username = "postgres"
-  port     = 5432
+  db_name  = var.DBInstanceDatabaseName
+  username = var.DBInstanceUsername
+  port     = var.DBInstancePort
 
   # Setting manage_master_user_password_rotation to false after it
   # has previously been set to true disables automatic rotation
@@ -58,8 +54,9 @@ module "db" {
   master_user_password_rotate_immediately           = false
   master_user_password_rotation_schedule_expression = "rate(30 days)"
 
-  multi_az               = true
-  db_subnet_group_name   = module.vpc.database_subnet_group
+  multi_az = true
+  # db_subnet_group_name   = module.vpc.database_subnet_group
+  db_subnet_group_name   = var.VPCDatabaseSubnetGroup
   vpc_security_group_ids = [module.security_group.security_group_id]
 
   maintenance_window              = "Mon:00:00-Mon:03:00"
@@ -71,13 +68,13 @@ module "db" {
   skip_final_snapshot     = true
   deletion_protection     = false
 
-  performance_insights_enabled          = false
-#   performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_interval                   = 60
-  monitoring_role_name                  = "example-monitoring-role-name"
-  monitoring_role_use_name_prefix       = true
-  monitoring_role_description           = "Description for monitoring role"
+  performance_insights_enabled = false
+  #   performance_insights_retention_period = 7
+  create_monitoring_role          = true
+  monitoring_interval             = 60
+  monitoring_role_name            = format("%s%s%s", var.Prefix, "rds-mintoring", var.EnvCode)
+  monitoring_role_use_name_prefix = true
+  monitoring_role_description     = "Monitoring role for RDS database"
 
   parameters = [
     {
@@ -102,83 +99,50 @@ module "db" {
   }
 }
 
+# module "kms" {
+#   source      = "terraform-aws-modules/kms/aws"
+#   version     = "~> 1.0"
+#   description = "KMS key for cross region automated backups replication"
 
+#   # Aliases
+#   aliases                 = [format("%s%s%s", var.Prefix, "kms", var.EnvCode)]
+#   aliases_use_name_prefix = true
 
-################################################################################
-# RDS Automated Backups Replication Module
-################################################################################
+#   key_owners = [data.aws_caller_identity.current.arn]
 
-provider "aws" {
-  alias  = "region2"
-  region = local.region2
-}
+#   tags = local.tags
+# }
 
-module "kms" {
-  source      = "terraform-aws-modules/kms/aws"
-  version     = "~> 1.0"
-  description = "KMS key for cross region automated backups replication"
+# resource "aws_db_instance_automated_backups_replication" "this" {
+#   source_db_instance_arn = module.db.db_instance_arn
+#   kms_key_id             = module.kms.key_arn
+#   retention_period = 7
+#   region = "us-west-1"
+# }
 
-  # Aliases
-  aliases                 = [local.name]
-  aliases_use_name_prefix = true
-
-  key_owners = [data.aws_caller_identity.current.arn]
-
-  tags = local.tags
-
-  providers = {
-    aws = aws.region2
-  }
-}
-
-module "db_automated_backups_replication" {
-  source = "../../modules/db_instance_automated_backups_replication"
-
-  source_db_instance_arn = module.db.db_instance_arn
-  kms_key_arn            = module.kms.key_arn
-
-  providers = {
-    aws = aws.region2
-  }
-}
 
 ################################################################################
 # Supporting Resources
 ################################################################################
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
 
-  name = local.name
-  cidr = local.vpc_cidr
-
-  azs              = local.azs
-  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
-  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
-  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
-
-  create_database_subnet_group = true
-
-  tags = local.tags
-}
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = local.name
-  description = "Complete PostgreSQL example security group"
-  vpc_id      = module.vpc.vpc_id
+  name        = format("%s%s%s%s", var.Prefix, "sg", var.EnvCode, "01")
+  description = "PostgreSQL security group"
+  vpc_id      = var.VPCID
 
   # ingress
   ingress_with_cidr_blocks = [
     {
-      from_port   = 5432
-      to_port     = 5432
+      from_port   = module.db.db_instance_port
+      to_port     = module.db.db_instance_port
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      cidr_blocks = var.VPCCIDR
     },
   ]
 

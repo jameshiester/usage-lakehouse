@@ -5,90 +5,35 @@ terraform {
       version = ">= 4.0"
     }
   }
+  backend "s3" {}
 }
 
 
 
 provider "aws" {
-  region = var.aws_region
+  region = var.Region
 }
 
 data "aws_availability_zones" "available" {}
 
 locals {
-  name   = "ex-${basename(path.cwd)}"
-  region = "eu-west-1"
-
   vpc_cidr                     = "10.0.0.0/16"
   azs                          = slice(data.aws_availability_zones.available.names, 0, 3)
   preferred_maintenance_window = "sun:05:00-sun:06:00"
 
   tags = {
-    Example    = local.name
-    GithubRepo = "terraform-aws-rds-aurora"
-    GithubOrg  = "terraform-aws-modules"
+    EnvCode     = var.EnvCode
+    Environment = var.EnvTag
+    Solution    = var.SolTag
   }
 }
 
-variable "aws_region" {
-  description = "The AWS region to deploy resources in."
-  type        = string
-  default     = "us-east-1"
-}
-
-
-data "aws_rds_engine_version" "postgresql" {
-  engine  = "aurora-postgresql"
-  version = "16.1"
-}
-
-module "aurora_postgresql_v2" {
-  source  = "terraform-aws-modules/rds-aurora/aws"
-  name              = "${local.name}-postgresqlv2"
-  engine            = data.aws_rds_engine_version.postgresql.engine
-  engine_mode       = "provisioned"
-  engine_version    = data.aws_rds_engine_version.postgresql.version
-  storage_encrypted = true
-  master_username   = "root"
-  vpc_id               = module.vpc.vpc_id
-  db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
-    }
-  }
-
-  monitoring_interval = 60
-
-  apply_immediately   = true
-  skip_final_snapshot = true
-
-  enable_http_endpoint = true
-
-  serverlessv2_scaling_configuration = {
-    min_capacity             = 0
-    max_capacity             = 10
-    seconds_until_auto_pause = 3600
-  }
-
-  instance_class = "db.serverless"
-  instances = {
-    one = {}
-    two = {}
-  }
-
-  tags = local.tags
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
-  name = local.name
+  name = format("%s%s%s%s", var.Prefix, "vpc", var.EnvCode, "01")
   cidr = local.vpc_cidr
 
   azs              = local.azs
@@ -96,5 +41,42 @@ module "vpc" {
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
+  create_database_subnet_group = true
+
   tags = local.tags
+}
+
+module "db" {
+  source                 = "./modules/db"
+  Region                 = var.Region
+  Prefix                 = var.Prefix
+  VPCID                  = module.vpc.vpc_id
+  VPCDatabaseSubnetGroup = module.vpc.database_subnet_group
+  GitHubRepo             = var.GitHubRepo
+  SolTag                 = var.SolTag
+  DBInstanceSize         = var.DBInstanceSize
+  EnvCode                = var.EnvCode
+  VPCCIDR                = local.vpc_cidr
+  AZS                    = local.azs
+  EnvTag                 = var.EnvTag
+}
+
+module "ecs" {
+  source             = "./modules/ecs"
+  Region             = var.Region
+  Prefix             = var.Prefix
+  VPCID              = module.vpc.vpc_id
+  SolTag             = var.SolTag
+  EnvCode            = var.EnvCode
+  VPCCIDR            = local.vpc_cidr
+  AZS                = local.azs
+  EnvTag             = var.EnvTag
+  DBSecretArn        = module.db.db_instance_master_user_secret_arn
+  DBHost             = module.db.db_instance_address
+  DBInstancePort     = module.db.db_instance_port
+  DBInstanceUsername = module.db.db_instance_username
+  ImageTag           = var.ImageTag
+  ECRRepo            = var.ECRRepo
+  PublicSubnets      = module.vpc.public_subnets
+  PrivateSubnets     = module.vpc.private_subnets
 }
