@@ -68,6 +68,12 @@ data "aws_iam_policy_document" "SampleApp" {
     resources = ["arn:aws:secretsmanager:*:*:secret:rds-db-credentials/*"]
   }
   statement {
+    actions = [
+      "secretsmanager:CreateSecret"
+    ]
+    resources = ["*"]
+  }
+  statement {
     actions   = ["rds:*"]
     resources = ["*"]
   }
@@ -82,6 +88,7 @@ data "aws_iam_policy_document" "SampleApp" {
   statement {
     actions = [
       "ec2:DeleteNetworkAclEntry",
+      "ec2:CreateNetworkAclEntry"
     ]
     resources = [
       "arn:aws:ec2:${var.Region}:${data.aws_caller_identity.current.account_id}:network-acl/*"
