@@ -1,5 +1,5 @@
 # Run this workflow manually from GitHub to destroy Development environment
-name: "Destroy Deve"
+name: "Destroy Dev"
 run-name: ${{ github.actor}} is running a Terraform destroy on Dev 🔥
 on:
   workflow_dispatch:

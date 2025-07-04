@@ -232,6 +232,7 @@ resource "aws_iam_role_policy" "ecstaskexec" {
 # Establish IAM Role with permissions for Amazon ECS to access Amazon ECR for image pulling and CloudWatch for logging
 resource "aws_iam_role" "ecstask" {
   name = format("%s%s%s%s", var.Prefix, "iar", var.EnvCode, "api-role")
+  description = "Role assumed by the usage lakehouse go api task"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
