@@ -6,6 +6,7 @@ data "aws_iam_policy_document" "SampleApp" {
     actions = [
       "cloudformation:DescribeStacks",
       "ec2:CreateTags",
+      "ec2:ModifyVpcAttribute",
       "ec2:DescribeAccountAttributes",
       "ec2:DescribeAddresses",
       "ec2:DescribeFlowLogs",
@@ -38,6 +39,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "kms:CreateKey",
       "kms:ListAliases",
       "logs:DescribeLogGroups",
+      "logs:ListTagsForResource",
       "resource-groups:CreateGroup"
     ]
     resources = [
@@ -246,6 +248,7 @@ data "aws_iam_policy_document" "SampleApp" {
   }
   statement {
     actions = [
+      "iam:AttachRolePolicy",
       "iam:CreateServiceLinkedRole",
       "iam:CreateRole",
       "iam:DeleteRole",
