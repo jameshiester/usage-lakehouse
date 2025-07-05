@@ -21,6 +21,7 @@ module "go_lambda_function" {
     POSTGRES_DB = module.db.db_instance_database
     POSTGRES_HOST = module.db.db_instance_address
     POSTGRES_USERNAME = module.db.db_instance_username
+    POSTGRES_PORT = module.db.db_instance_port
     DB_MASTER_SECRET_ARN = module.db.db_instance_master_user_secret_arn
   }
   policy_json = jsonencode(

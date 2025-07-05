@@ -52,6 +52,9 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
 	dbPort := os.Getenv("POSTGRES_PORT")
+	if dbPort == "" {
+		dbPort = "5432"
+	}
 	database := os.Getenv("POSTGRES_DB")
 	fmt.Println(userName, password, host, dbPort, database)
 
