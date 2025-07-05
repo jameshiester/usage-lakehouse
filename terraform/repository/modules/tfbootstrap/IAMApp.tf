@@ -47,7 +47,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:ListFunctions",
       "lambda:GetFunction",
       "lambda:DeleteFunction",
-      "lambda:InvokeFunction"
+      "lambda:InvokeFunction",
+      "iam:GetPolicy"
     ]
     resources = [
       "*"
