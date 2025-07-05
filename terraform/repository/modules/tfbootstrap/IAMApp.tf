@@ -47,6 +47,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:ListFunctions",
       "lambda:GetFunction",
       "lambda:DeleteFunction",
+      "lambda:TagResource",
       "lambda:InvokeFunction",
       "iam:GetPolicy",
       "iam:GetPolicyVersion"
