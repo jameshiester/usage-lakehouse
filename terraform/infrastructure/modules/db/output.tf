@@ -23,3 +23,9 @@ output "db_instance_username" {
   value       = module.db.db_instance_username
   sensitive   = true
 }
+
+output "db_instance_database" {
+  description = "The default datatabse name"
+  value       = module.db.db_instance_name
+  sensitive   = true
+}

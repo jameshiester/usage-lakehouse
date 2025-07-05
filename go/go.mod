@@ -18,7 +18,9 @@ require (
 require (
 	github.com/apache/arrow/go/arrow v0.0.0-20200730104253-651201b0f516 // indirect
 	github.com/apache/thrift v0.21.0 // indirect
-	github.com/aws/aws-sdk-go v1.43.31 // indirect
+	github.com/aws/aws-lambda-go v1.49.0 // indirect
+	github.com/aws/aws-sdk-go v1.47.10 // indirect
+	github.com/aws/aws-secretsmanager-caching-go v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-pg/zerochecker v0.2.0 // indirect

@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-secretsmanager-caching-go/secretcache"
 	"github.com/go-pg/migrations/v8"
 	"github.com/go-pg/pg/v10"
 )
@@ -22,11 +27,29 @@ Usage:
   go run *.go <command> [args]
 `
 
-func main() {
-	flag.Usage = usage
-	flag.Parse()
-	userName := os.Getenv("POSTGRES_USER")
+var (
+	secretCache, _ = secretcache.New()
+)
+
+func handleRequest(ctx context.Context, event json.RawMessage) {
+	// Decode the JSON event into a struct
+	var eventData struct {
+		Args []string `json:"args"`
+	}
+	if err := json.Unmarshal(event, &eventData); err != nil {
+		exitf("error unmarshaling event: %v", err)
+	}
 	password := os.Getenv("POSTGRES_PASSWORD")
+	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
+	if secretArn != "" {
+		result, err := secretCache.GetSecretString(secretArn)
+		if err != nil {
+			exitf("error retrieving database secret: %v", err)
+		}
+		password = result
+	}
+
+	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
 	dbPort := os.Getenv("POSTGRES_PORT")
 	database := os.Getenv("POSTGRES_DB")
@@ -38,7 +61,7 @@ func main() {
 		Password: password,
 		Addr:     fmt.Sprintf("%s:%s", host, dbPort),
 	})
-	if len(flag.Args()) == 0 || flag.Args()[0] != "init" {
+	if len(eventData.Args) == 0 || eventData.Args[0] != "init" {
 		// Check if gopg_migrations table exists
 		type TableExistsResult struct {
 			Exists bool `pg:"exists"`
@@ -57,7 +80,7 @@ func main() {
 			}
 		}
 	}
-	oldVersion, newVersion, err := migrations.Run(db, flag.Args()...)
+	oldVersion, newVersion, err := migrations.Run(db, eventData.Args...)
 	if err != nil {
 		exitf(err.Error())
 	}
@@ -66,6 +89,28 @@ func main() {
 	} else {
 		fmt.Printf("version is %d\n", oldVersion)
 	}
+}
+
+func main() {
+	lambda_mode := os.Getenv("LAMBDA_MODE")
+	if lambda_mode == "" {
+		ctx := context.Background()
+		flag.Usage = usage
+		flag.Parse()
+		// Create a JSON message with args
+		eventData := map[string]interface{}{
+			"args": flag.Args(),
+		}
+		eventJSON, err := json.Marshal(eventData)
+		if err != nil {
+			log.Fatal("Failed to marshal event JSON:", err)
+		}
+
+		handleRequest(ctx, json.RawMessage(eventJSON))
+	} else {
+		lambda.Start(handleRequest)
+	}
+
 }
 
 func usage() {

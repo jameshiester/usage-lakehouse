@@ -42,7 +42,12 @@ data "aws_iam_policy_document" "SampleApp" {
       "kms:ListAliases",
       "logs:DescribeLogGroups",
       "logs:ListTagsForResource",
-      "resource-groups:CreateGroup"
+      "resource-groups:CreateGroup",
+      "lambda:CreateFunction",
+      "lambda:ListFunctions",
+      "lambda:GetFunction",
+      "lambda:DeleteFunction",
+      "lambda:InvokeFunction"
     ]
     resources = [
       "*"
@@ -74,7 +79,9 @@ data "aws_iam_policy_document" "SampleApp" {
       "secretsmanager:ListSecrets",
       "secretsmanager:PutSecretValue",
       "secretsmanager:TagResource",
-      "secretsmanager:RotateSecret"
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:RotateSecret",
+      "secretsmanager:CancelRotateSecret"
     ]
     resources = ["*"]
   }

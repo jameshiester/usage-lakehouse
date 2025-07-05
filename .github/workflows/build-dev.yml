@@ -14,15 +14,17 @@ env:
    AWS_BUCKET_NAME: ${{ secrets.TF_STATE_BUCKET_NAME }}
    AWS_BUCKET_KEY_NAME: ${{ secrets.TF_STATE_BUCKET_KEY }}
 
-jobs:
+jobs:    
   terraform:
     runs-on: ubuntu-latest
+    needs: [build-lambda]
     defaults:
       run:
         working-directory: ./terraform/infrastructure
     environment: 
       name: dev
     env:
+      LAMBDA_ARTIFACT_ID: ${{needs.build-lambda.outputs.artifact_id}}
       TF_VAR_Region: ${{ vars.TF_VAR_REGION }}
       TF_VAR_AZ01: ${{ vars.TF_VAR_AZ01 }}
       TF_VAR_AZ02: ${{ vars.TF_VAR_AZ02 }}
