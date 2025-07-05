@@ -282,6 +282,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "iam:CreateServiceLinkedRole",
       "iam:CreateRole",
       "iam:DeleteRole",
+      "iam:GetPolicy",
       "iam:DeleteRolePolicy",
       "iam:GetRole",
       "iam:GetRolePolicy",
