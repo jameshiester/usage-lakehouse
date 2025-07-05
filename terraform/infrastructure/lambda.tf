@@ -6,11 +6,11 @@ module "go_lambda_function" {
   attach_cloudwatch_logs_policy     = false
   cloudwatch_logs_retention_in_days = 1
   tags                              = local.tags
-  handler                           = "migration-lambda"
+  handler                           = "bootstrap"
   runtime                           = "provided.al2023"
   architectures                     = ["arm64"] # x86_64 (GOARCH=amd64); arm64 (GOARCH=arm64)
 
-  trigger_on_package_timestamp = false
+  trigger_on_package_timestamp = true
 
   vpc_subnet_ids         = module.vpc.private_subnets
   vpc_security_group_ids = [module.vpc.default_security_group_id]
@@ -52,12 +52,12 @@ module "go_lambda_function" {
     {
       path = "${path.module}/../../go"
       commands = [
-        "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o migration-lambda cmd/migrations/main.go",
+        "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go",
         ":zip",
       ]
       patterns = [
         "!.*",
-        "migration-lambda",
+        "bootstrap",
       ]
     }
   ]
