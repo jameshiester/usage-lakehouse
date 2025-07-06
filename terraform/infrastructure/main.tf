@@ -48,40 +48,28 @@ module "vpc" {
   intra_subnets    = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 9)]
 
   create_database_subnet_group = true
-  default_security_group_egress = [{
-    rule_number = 110
-    rule_action = "allow"
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_block  = "0.0.0.0/0"
-    },
-    {
-      rule_number = 120
-      rule_action = "allow"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_block  = "0.0.0.0/0"
-  }, ]
 
   tags = local.tags
 }
 
 resource "aws_security_group" "lambda" {
-  name        = format("%s%s%s%s", var.Prefix, "sg", var.EnvCode, "lambda")
-  description = "Security group for lambda function"
+  name        = format("%s%s%s%s", var.Prefix, "scg", var.EnvCode, "lambda")
+  description = " Application Security Group"
   vpc_id      = module.vpc.vpc_id
-  tags        = local.tags
-}
 
-resource "aws_vpc_security_group_egress_rule" "https" {
-  security_group_id = aws_security_group.lambda.id
+  egress {
+    description = "Application Outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 443
-  ip_protocol = "tcp"
-  to_port     = 443
+  tags = {
+    Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
+    resourcetype = "security"
+    codeblock    = "network-3tier"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "postgres" {
