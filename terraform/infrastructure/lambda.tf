@@ -61,7 +61,7 @@ module "go_lambda_function" {
       ]
       patterns = [
         "!cmd/.*",
-        "*"
+        ".*"
       ]
     }
   ]
