@@ -5,6 +5,7 @@ module "go_lambda_function" {
 
   attach_cloudwatch_logs_policy     = false
   cloudwatch_logs_retention_in_days = 1
+  timeout = 120
   tags                              = local.tags
   handler                           = "bootstrap"
   runtime                           = "provided.al2023"
