@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -74,7 +75,18 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 		Database: database,
 		Password: password,
 		Addr:     fmt.Sprintf("%s:%s", host, dbPort),
+		OnConnect: func(ctx context.Context, cn *pg.Conn) error {
+			fmt.Println("connected to pg database")
+			return nil
+		},
+		TLSConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
 	})
+	err := db.Ping(ctx)
+	if err != nil {
+		fmt.Println("error pinging database")
+	}
 	if len(eventData.Args) == 0 || eventData.Args[0] != "init" {
 		// Check if gopg_migrations table exists
 		type TableExistsResult struct {
