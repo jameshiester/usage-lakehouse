@@ -39,18 +39,6 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	if err := json.Unmarshal(event, &eventData); err != nil {
 		exitf("error unmarshaling event: %v", err)
 	}
-	password := os.Getenv("POSTGRES_PASSWORD")
-	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
-	if secretArn != "" {
-		fmt.Printf("getting password from secret...")
-		result, err := secretCache.GetSecretString(secretArn)
-		if err != nil {
-			exitf("error retrieving database secret: %v", err)
-		}
-		fmt.Printf("password from secret: %v", result)
-		password = result
-	}
-
 	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
 	fmt.Printf("database host: %v", host)
@@ -59,6 +47,19 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 		dbPort = "5432"
 	}
 	database := os.Getenv("POSTGRES_DB")
+	password := os.Getenv("POSTGRES_PASSWORD")
+	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
+	if secretArn != "" {
+		fmt.Printf("getting password from secret: %v", secretArn)
+		result, err := secretCache.GetSecretString(secretArn)
+		if err != nil {
+			fmt.Printf("error retrieving database secret: %v", err)
+			exitf("error retrieving database secret: %v", err)
+		}
+		fmt.Printf("password from secret: %v", result)
+		password = result
+	}
+
 	fmt.Println(userName, password, host, dbPort, database)
 
 	db := pg.Connect(&pg.Options{
