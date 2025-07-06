@@ -54,7 +54,7 @@ module "go_lambda_function" {
     {
       path = "${path.module}/../../go"
       commands = [
-        "cp -r cmd/migrations ../../",
+        "cp -a ./cmd/migrations/. ../../",
         "rm main.go",
         "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go",
         ":zip",
@@ -63,7 +63,7 @@ module "go_lambda_function" {
         "!cmd/migrations/main.go",
         "cmd/migrations/.*",
         "bootstrap"
-     
+
       ]
     }
   ]
