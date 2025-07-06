@@ -68,6 +68,24 @@ module "vpc" {
   tags = local.tags
 }
 
+resource "aws_vpc_security_group_egress_rule" "https" {
+  security_group_id = module.vpc.default_security_group_id
+
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 443
+  ip_protocol = "tcp"
+  to_port     = 443
+}
+
+resource "aws_vpc_security_group_egress_rule" "postgres" {
+  security_group_id = module.vpc.default_security_group_id
+
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 5432
+  ip_protocol = "tcp"
+  to_port     = 5432
+}
+
 module "vpc_endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 
