@@ -21,7 +21,7 @@ module "go_lambda_function" {
   environment_variables = {
     LAMBDA_MODE          = "true"
     POSTGRES_DB          = module.db.db_instance_database
-    POSTGRES_HOST        = module.db.db_instance_address
+    POSTGRES_HOST        = module.db.db_instance_endpoint
     POSTGRES_USERNAME    = module.db.db_instance_username
     POSTGRES_PORT        = module.db.db_instance_port
     DB_MASTER_SECRET_ARN = module.db.db_instance_master_user_secret_arn
