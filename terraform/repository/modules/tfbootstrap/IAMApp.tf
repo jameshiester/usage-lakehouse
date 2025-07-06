@@ -133,7 +133,8 @@ data "aws_iam_policy_document" "SampleApp" {
   }
   statement {
     actions = [
-      "ec2:DetachNetworkInterface"
+      "ec2:DetachNetworkInterface",
+      "ec2:DeleteNetworkInterface"
     ]
     resources = [
       "arn:aws:ec2:${var.Region}:${data.aws_caller_identity.current.account_id}:network-interface/*"
