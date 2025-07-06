@@ -41,7 +41,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	}
 	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
-	fmt.Printf("database host: %v", host)
+	fmt.Printf("database host: %v\n", host)
 	dbPort := os.Getenv("POSTGRES_PORT")
 	if dbPort == "" {
 		dbPort = "5432"
@@ -50,13 +50,13 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	password := os.Getenv("POSTGRES_PASSWORD")
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
 	if secretArn != "" {
-		fmt.Printf("getting password from secret: %v", secretArn)
+		fmt.Printf("getting password from secret: %v\n", secretArn)
 		result, err := secretCache.GetSecretString(secretArn)
 		if err != nil {
-			fmt.Printf("error retrieving database secret: %v", err)
+			fmt.Printf("error retrieving database secret: %v\n", err)
 			exitf("error retrieving database secret: %v", err)
 		}
-		fmt.Printf("password from secret: %v", result)
+		fmt.Printf("password from secret: %v\n", result)
 		password = result
 	}
 
@@ -99,10 +99,10 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 }
 
 func main() {
-	fmt.Printf("Executing migration...")
+	fmt.Printf("Executing migration...\n")
 	lambda_mode := os.Getenv("LAMBDA_MODE")
 	if lambda_mode == "" {
-		fmt.Printf("Executing in lambda mode")
+		fmt.Printf("Executing in lambda mode\n")
 		ctx := context.Background()
 		flag.Usage = usage
 		flag.Parse()

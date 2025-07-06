@@ -13,7 +13,7 @@ module "go_lambda_function" {
 
   trigger_on_package_timestamp = true
 
-  vpc_subnet_ids         = module.vpc.intra_subnets
+  vpc_subnet_ids         = module.vpc.public_subnets
   vpc_security_group_ids = [module.vpc.default_security_group_id]
   attach_network_policy  = true
   attach_policy_json     = true
