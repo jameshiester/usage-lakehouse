@@ -72,14 +72,14 @@ module "vpc" {
 #   }
 # }
 
-resource "aws_vpc_security_group_egress_rule" "postgres" {
-  security_group_id = aws_security_group.lambda.id
+# resource "aws_vpc_security_group_egress_rule" "postgres" {
+#   security_group_id = aws_security_group.lambda.id
 
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 5432
-  ip_protocol = "tcp"
-  to_port     = 5432
-}
+#   cidr_ipv4   = "0.0.0.0/0"
+#   from_port   = 5432
+#   ip_protocol = "tcp"
+#   to_port     = 5432
+# }
 
 module "vpc_endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
