@@ -33,8 +33,8 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 6.0"
 
-  name = format("%s%s%s%s", var.Prefix, "vpc", var.EnvCode, "01")
-  cidr = local.vpc_cidr
+  name               = format("%s%s%s%s", var.Prefix, "vpc", var.EnvCode, "01")
+  cidr               = local.vpc_cidr
   enable_nat_gateway = true
   single_nat_gateway = true
 
@@ -45,7 +45,23 @@ module "vpc" {
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
-  intra_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 9)]
+  intra_subnets    = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 9)]
+  default_security_group_egress = [{
+    rule_number = 110
+    rule_action = "allow"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_block  = "0.0.0.0/0"
+    },
+    {
+      rule_number = 120
+      rule_action = "allow"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_block  = "0.0.0.0/0"
+  }, ]
 
   create_database_subnet_group = true
 
@@ -58,7 +74,7 @@ module "vpc_endpoints" {
   vpc_id = module.vpc.vpc_id
 
   create_security_group      = true
-  security_group_name_prefix = format("%s%s-","vpc-endpoints-", var.EnvCode)
+  security_group_name_prefix = format("%s%s-", "vpc-endpoints-", var.EnvCode)
   security_group_description = "VPC endpoint security group"
   security_group_rules = {
     ingress_https = {

@@ -56,8 +56,15 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 			fmt.Printf("error retrieving database secret: %v\n", err)
 			exitf("error retrieving database secret: %v", err)
 		}
+		var passwordData struct {
+			Password string `json:"password"`
+			Username string `json:"username"`
+		}
+		if err := json.Unmarshal(event, &passwordData); err != nil {
+			exitf("error unmarshaling event: %v", err)
+		}
 		fmt.Printf("password from secret: %v\n", result)
-		password = result
+		password = passwordData.Password
 	}
 
 	fmt.Println(userName, password, host, dbPort, database)
