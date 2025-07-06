@@ -8,7 +8,7 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.3.0
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-pg/migrations/v8 v8.1.0
-	github.com/go-pg/pg/v10 v10.4.0
+	github.com/go-pg/pg/v10 v10.14.0
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
 	github.com/xitongsys/parquet-go v1.6.2
@@ -43,16 +43,17 @@ require (
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/vmihailenco/bufpool v0.1.11 // indirect
-	github.com/vmihailenco/msgpack/v5 v5.0.0-beta.1 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser v0.1.2 // indirect
+	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	go.opentelemetry.io/otel v0.13.0 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/sync v0.15.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/text v0.26.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
-	mellium.im/sasl v0.2.1 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
+	mellium.im/sasl v0.3.2 // indirect
 )
