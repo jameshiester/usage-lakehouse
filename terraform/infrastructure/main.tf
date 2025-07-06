@@ -55,7 +55,7 @@ module "vpc" {
 resource "aws_security_group" "lambda" {
   name        = format("%s%s%s%s", var.Prefix, "sg", var.EnvCode, "lambda")
   description = "Security group for lambda function"
-  vpc_id      = module.vpc.default_vpc_id
+  vpc_id      = module.vpc.vpc_id
   tags        = local.tags
   egress {
     description = "Web Outbound"
