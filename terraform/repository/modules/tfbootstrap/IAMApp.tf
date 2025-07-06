@@ -50,6 +50,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:TagResource",
       "lambda:InvokeFunction",
       "lambda:ListVersionsByFunction",
+      "lambda:GetFunctionCodeSigningConfig",
       "iam:GetPolicy",
       "iam:GetPolicyVersion"
     ]
