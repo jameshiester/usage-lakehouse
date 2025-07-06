@@ -48,6 +48,22 @@ module "vpc" {
   intra_subnets    = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 9)]
 
   create_database_subnet_group = true
+  default_security_group_egress = [{
+    rule_number = 110
+    rule_action = "allow"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_block  = "0.0.0.0/0"
+    },
+    {
+      rule_number = 120
+      rule_action = "allow"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_block  = "0.0.0.0/0"
+  }, ]
 
   tags = local.tags
 }
