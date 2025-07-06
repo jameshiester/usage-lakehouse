@@ -57,15 +57,25 @@ resource "aws_security_group" "lambda" {
   description = "Security group for lambda function"
   vpc_id      = module.vpc.vpc_id
   tags        = local.tags
-  egress {
-    description = "Web Outbound"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
+resource "aws_vpc_security_group_egress_rule" "https" {
+  security_group_id = aws_security_group.lambda.id
+
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 443
+  ip_protocol = "tcp"
+  to_port     = 443
+}
+
+resource "aws_vpc_security_group_egress_rule" "postgres" {
+  security_group_id = aws_security_group.lambda.id
+
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 5432
+  ip_protocol = "tcp"
+  to_port     = 5432
+}
 
 module "vpc_endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
