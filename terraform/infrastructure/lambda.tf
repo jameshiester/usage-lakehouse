@@ -7,7 +7,7 @@ module "go_lambda_function" {
   cloudwatch_logs_retention_in_days = 1
   timeout                           = 120
   tags                              = local.tags
-  handler                           = "bootstrap"
+  handler                           = "cmd/migrations/bootstrap"
   runtime                           = "provided.al2023"
   architectures                     = ["arm64"] # x86_64 (GOARCH=amd64); arm64 (GOARCH=arm64)
 
@@ -54,14 +54,14 @@ module "go_lambda_function" {
     {
       path = "${path.module}/../../go"
       commands = [
-        "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go",
+        "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o cmd/migrations/bootstrap cmd/migrations/main.go",
         ":zip",
       ]
-      # patterns = [
-      #   "!.go",
-      #   "*.sql",
-      #   "bootstrap",
-      # ]
+      patterns = [
+        "!cmd/migrations/main.go",
+        "cmd/migrations/.*",
+     
+      ]
     }
   ]
 }
