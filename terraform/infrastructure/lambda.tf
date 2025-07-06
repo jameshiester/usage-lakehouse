@@ -16,6 +16,7 @@ module "go_lambda_function" {
   vpc_security_group_ids = [module.vpc.default_security_group_id]
   attach_network_policy  = true
   attach_policy_json     = true
+  logging_log_group = format("%s-%s-%s", var.Prefix, var.EnvCode, "migration")
   environment_variables = {
     LAMBDA_MODE          = "true"
     POSTGRES_DB          = module.db.db_instance_database

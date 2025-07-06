@@ -95,6 +95,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 }
 
 func main() {
+	fmt.Printf("Executing migration...")
 	lambda_mode := os.Getenv("LAMBDA_MODE")
 	if lambda_mode == "" {
 		ctx := context.Background()
