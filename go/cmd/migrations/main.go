@@ -50,6 +50,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	database := os.Getenv("POSTGRES_DB")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
+	fmt.Println("new aws lambda version")
 	if secretArn != "" {
 		fmt.Printf("getting password from secret: %v\n", secretArn)
 		result, err := secretCache.GetSecretString(secretArn)
@@ -62,6 +63,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 			Username string `json:"username"`
 		}
 		if err := json.Unmarshal([]byte(result), &passwordData); err != nil {
+			fmt.Printf("error retrieving database secret: %v\n", err)
 			exitf("error unmarshaling password data: %v", err)
 		}
 		password = passwordData.Password

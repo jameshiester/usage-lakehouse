@@ -68,8 +68,15 @@ module "vpc" {
   tags = local.tags
 }
 
+ resource "aws_security_group" "lambda" {
+       name        = format("%s%s%s%s", var.Prefix, "sg", var.EnvCode, "lambda")
+       description = "Security group for lambda function"
+       vpc_id      = module.vpc.default_vpc_id
+       tags  = local.tags
+}
+
 resource "aws_vpc_security_group_egress_rule" "https" {
-  security_group_id = module.vpc.default_security_group_id
+  security_group_id = aws_security_group.lambda.id
 
   cidr_ipv4   = "0.0.0.0/0"
   from_port   = 443
@@ -78,7 +85,7 @@ resource "aws_vpc_security_group_egress_rule" "https" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "postgres" {
-  security_group_id = module.vpc.default_security_group_id
+  security_group_id = aws_security_group.lambda.id
 
   cidr_ipv4   = "0.0.0.0/0"
   from_port   = 5432
