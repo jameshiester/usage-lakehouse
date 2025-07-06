@@ -71,7 +71,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:UpdateFunctionConfiguration",
       "logs:DescribeLogGroups",
       "logs:ListTagsForResource",
-      "resource-groups:CreateGroup"
+      "resource-groups:CreateGroup",
+      "resource-groups:UpdateGroupQuery"
     ]
     resources = [
       "*"

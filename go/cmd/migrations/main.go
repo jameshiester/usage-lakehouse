@@ -43,10 +43,6 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
 	fmt.Printf("database host: %v\n", host)
-	dbPort := os.Getenv("POSTGRES_PORT")
-	if dbPort == "" {
-		dbPort = "5432"
-	}
 	database := os.Getenv("POSTGRES_DB")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
@@ -75,7 +71,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 		User:     userName,
 		Database: database,
 		Password: password,
-		Addr:     fmt.Sprintf("%s:%s", host, dbPort),
+		Addr:     host,
 		OnConnect: func(ctx context.Context, cn *pg.Conn) error {
 			fmt.Println("connected to pg database")
 			return nil
