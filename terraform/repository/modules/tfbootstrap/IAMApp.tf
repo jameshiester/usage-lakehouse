@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
       "iam:GetPolicy",
-      "iam:GetPolicyVersion"
+      "iam:GetPolicyVersion",
       "kms:CreateKey",
       "kms:ListAliases",
       "lambda:CreateFunction",
@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:UpdateFunctionConfiguration",
       "logs:DescribeLogGroups",
       "logs:ListTagsForResource",
-      "resource-groups:CreateGroup",
+      "resource-groups:CreateGroup"
     ]
     resources = [
       "*"
