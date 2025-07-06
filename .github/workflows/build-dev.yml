@@ -75,6 +75,10 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
+      - name: Terraform Refresh
+        id: validate
+        run: terraform refresh
+
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -input=false
