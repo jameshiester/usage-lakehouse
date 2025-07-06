@@ -122,7 +122,6 @@ func main() {
 	fmt.Printf("Executing migration...\n")
 	lambda_mode := os.Getenv("LAMBDA_MODE")
 	if lambda_mode == "" {
-		fmt.Printf("Executing in lambda mode\n")
 		ctx := context.Background()
 		flag.Usage = usage
 		flag.Parse()
