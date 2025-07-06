@@ -58,7 +58,8 @@ module "go_lambda_function" {
         ":zip",
       ]
       patterns = [
-        "!.*",
+        "!.go",
+        "*.sql",
         "bootstrap",
       ]
     }
