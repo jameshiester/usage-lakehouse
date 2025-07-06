@@ -54,13 +54,15 @@ module "go_lambda_function" {
     {
       path = "${path.module}/../../go"
       commands = [
-        "cp -r ./cmd/migrations/. ../../",
+        "cp -r cmd/migrations/. ./",
         "rm main.go",
         "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go",
         ":zip",
       ]
       patterns = [
         "!cmd/.*",
+        "!internal/.*",
+        "!API.Dockerfile",
         ".*"
       ]
     }
