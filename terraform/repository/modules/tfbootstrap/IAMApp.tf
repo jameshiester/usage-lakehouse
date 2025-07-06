@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "lambda:InvokeFunction",
       "lambda:ListVersionsByFunction",
       "lambda:GetFunctionCodeSigningConfig",
+      "lambda:UpdateFunctionConfiguration",
       "iam:GetPolicy",
       "iam:GetPolicyVersion"
     ]
