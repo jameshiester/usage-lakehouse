@@ -61,14 +61,13 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 			Password string `json:"password"`
 			Username string `json:"username"`
 		}
-		if err := json.Unmarshal(event, &passwordData); err != nil {
-			exitf("error unmarshaling event: %v", err)
+		if err := json.Unmarshal([]byte(result), &passwordData); err != nil {
+			exitf("error unmarshaling password data: %v", err)
 		}
-		fmt.Printf("password from secret: %v\n", result)
 		password = passwordData.Password
 	}
 
-	fmt.Println(userName, password, host, dbPort, database)
+	fmt.Printf("Host: %s, Password: %s, Database: %s\n", host, password, database)
 
 	db := pg.Connect(&pg.Options{
 		User:     userName,
