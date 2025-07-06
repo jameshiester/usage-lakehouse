@@ -57,11 +57,11 @@ module "go_lambda_function" {
         "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go",
         ":zip",
       ]
-      patterns = [
-        "!.go",
-        "*.sql",
-        "bootstrap",
-      ]
+      # patterns = [
+      #   "!.go",
+      #   "*.sql",
+      #   "bootstrap",
+      # ]
     }
   ]
 }
