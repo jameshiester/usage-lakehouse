@@ -36,6 +36,10 @@ module "vpc" {
   name = format("%s%s%s%s", var.Prefix, "vpc", var.EnvCode, "01")
   cidr = local.vpc_cidr
   enable_nat_gateway = true
+  single_nat_gateway = true
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   azs              = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
@@ -49,12 +53,12 @@ module "vpc" {
 }
 
 module "vpc_endpoints" {
-  source = "../../modules/vpc-endpoints"
+  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 
   vpc_id = module.vpc.vpc_id
 
   create_security_group      = true
-  security_group_name_prefix = "${local.name}-vpc-endpoints-"
+  security_group_name_prefix = format("%s%s-","vpc-endpoints-", var.EnvCode)
   security_group_description = "VPC endpoint security group"
   security_group_rules = {
     ingress_https = {
