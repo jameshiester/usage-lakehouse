@@ -35,6 +35,7 @@ module "vpc" {
 
   name = format("%s%s%s%s", var.Prefix, "vpc", var.EnvCode, "01")
   cidr = local.vpc_cidr
+  enable_nat_gateway = true
 
   azs              = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
