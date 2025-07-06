@@ -207,6 +207,8 @@ locals {
       TF_VAR_ENVCODE        = "dv"
       TF_VAR_ENVTAG         = "Development"
       TF_VAR_DBINSTANCESIZE = "db.t4g.micro"
+      TF_STATE_BUCKET_NAME  = module.tfbootstrap_dev.tfstate_bucket_name
+      TF_STATE_BUCKET_KEY = "terraform/dev.tfstate"
     }
   )
   # Declare test specific GitHub Environments variables

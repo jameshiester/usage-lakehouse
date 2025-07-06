@@ -52,34 +52,35 @@ module "vpc" {
   tags = local.tags
 }
 
-# resource "aws_security_group" "lambda" {
-#   name        = format("%s%s%s%s", var.Prefix, "scg", var.EnvCode, "lambda")
-#   description = " Application Security Group"
-#   vpc_id      = module.vpc.vpc_id
+resource "aws_security_group" "lambda" {
+  name        = format("%s%s%s%s", var.Prefix, "scg", var.EnvCode, "lambda")
+  description = " Application Security Group"
+  vpc_id      = module.vpc.vpc_id
 
-#   egress {
-#     description = "https"
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
+  tags = {
+    Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
+    resourcetype = "security"
+    codeblock    = "network-3tier"
+  }
+}
 
-#   tags = {
-#     Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
-#     resourcetype = "security"
-#     codeblock    = "network-3tier"
-#   }
-# }
+resource "aws_vpc_security_group_egress_rule" "postgres" {
+  security_group_id = aws_security_group.lambda.id
+  description = "postgres"
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 5432
+  ip_protocol = "tcp"
+  to_port     = 5432
+}
 
-# resource "aws_vpc_security_group_egress_rule" "postgres" {
-#   security_group_id = aws_security_group.lambda.id
-
-#   cidr_ipv4   = "0.0.0.0/0"
-#   from_port   = 5432
-#   ip_protocol = "tcp"
-#   to_port     = 5432
-# }
+resource "aws_vpc_security_group_egress_rule" "https" {
+  security_group_id = aws_security_group.lambda.id
+  description = "https"
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 443
+  ip_protocol = "tcp"
+  to_port     = 443
+}
 
 module "vpc_endpoints" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"

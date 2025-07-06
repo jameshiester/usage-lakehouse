@@ -14,8 +14,7 @@ module "go_lambda_function" {
   trigger_on_package_timestamp = true
 
   vpc_subnet_ids         = module.vpc.private_subnets
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
-  # vpc_security_group_ids = [aws_security_group.lambda.id]
+  vpc_security_group_ids = [aws_security_group.lambda.id]
   attach_network_policy  = true
   attach_policy_json     = true
   logging_log_group      = format("%s-%s-%s", var.Prefix, var.EnvCode, "migration")
