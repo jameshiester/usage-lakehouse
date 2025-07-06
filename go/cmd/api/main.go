@@ -142,6 +142,18 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+type HealthResponse struct {
+	Status string `json:"status"`
+}
+
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	response := HealthResponse{
+		Status: "Success",
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	userName := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
@@ -158,6 +170,7 @@ func main() {
 	accountHandler := handler.NewAccountHandler(accountRepo)
 
 	r := chi.NewRouter()
+	r.Get("/healthz", healthCheck)
 	r.Post("/accounts", accountHandler.CreateAccount)
 	r.Get("/accounts/{id}", accountHandler.GetAccount)
 	r.Put("/accounts/{id}", accountHandler.UpdateAccount)
