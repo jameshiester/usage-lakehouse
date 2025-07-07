@@ -143,7 +143,7 @@ EOF
 
 # Create Amazon ECS cluster 
 resource "aws_ecs_cluster" "mswebapp" {
-  name = format("%s%s%s%s", var.Prefix, "ecs", var.EnvCode, "application")
+  name = var.ECSCluster
 
   setting {
     name  = "containerInsights"

@@ -209,8 +209,8 @@ locals {
       TF_VAR_DBINSTANCESIZE = "db.t4g.micro"
       TF_STATE_BUCKET_NAME  = module.tfbootstrap_dev.tfstate_bucket_name
       TF_STATE_BUCKET_KEY   = "terraform/dev.tfstate"
-      TF_VAR_ECSSERVICE  = "usage-dev"
-      TF_VAR_ECSCLUSTER  = "usage-dev"
+      TF_VAR_ECSSERVICE     = "usage-dev"
+      TF_VAR_ECSCLUSTER     = "usage-dev"
     }
   )
   # Declare test specific GitHub Environments variables
@@ -221,8 +221,8 @@ locals {
       TF_VAR_ENVTAG         = "Testing"
       TF_VAR_DBINSTANCESIZE = "db.t4g.micro"
       TF_VAR_ECRREPO        = "usage-lakehouse-api-test"
-      TF_VAR_ECSSERVICE  = "usage-test"
-      TF_VAR_ECSCLUSTER  = "usage-test"
+      TF_VAR_ECSSERVICE     = "usage-test"
+      TF_VAR_ECSCLUSTER     = "usage-test"
     }
   )
   # Declare prod specific GitHub Environments variables
@@ -233,8 +233,8 @@ locals {
       TF_VAR_ENVTAG         = "Production"
       TF_VAR_DBINSTANCESIZE = "db.t4g.micro"
       TF_VAR_ECRREPO        = "usage-lakehouse-api"
-      TF_VAR_ECSSERVICE  = "usage"
-      TF_VAR_ECSCLUSTER  = "usage-dev"
+      TF_VAR_ECSSERVICE     = "usage"
+      TF_VAR_ECSCLUSTER     = "usage-dev"
     }
   )
 }

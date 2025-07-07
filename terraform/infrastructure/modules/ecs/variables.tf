@@ -57,8 +57,14 @@ variable "ECRRepo" {
   description = "Name of Amazon ECR repository"
   type        = string
 }
-variable "ImageTag" {
-  description = "Amazon ECR Microsoft sample application Image Tag"
+
+variable "ECSService" {
+  description = "Name of Amazon ECS Service"
+  type        = string
+}
+
+variable "ECSCluster" {
+  description = "Name of Amazon ECS Cluster"
   type        = string
 }
 
