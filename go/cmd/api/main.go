@@ -177,7 +177,7 @@ func main() {
 		}
 		if err := json.Unmarshal([]byte(result), &passwordData); err != nil {
 			fmt.Printf("error retrieving database secret: %v\n", err)
-			log.Fatal("error unmarshaling password data")
+			log.Fatal("error unmarshaling password")
 		}
 		password = passwordData.Password
 		userName = passwordData.Username
