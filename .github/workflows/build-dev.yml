@@ -23,7 +23,6 @@ jobs:
     environment: 
       name: dev
     env:
-      LAMBDA_ARTIFACT_ID: ${{needs.build-lambda.outputs.artifact_id}}
       TF_VAR_Region: ${{ vars.TF_VAR_REGION }}
       TF_VAR_AZ01: ${{ vars.TF_VAR_AZ01 }}
       TF_VAR_AZ02: ${{ vars.TF_VAR_AZ02 }}
