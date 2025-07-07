@@ -189,7 +189,7 @@ func main() {
 	host := os.Getenv("POSTGRES_HOST")
 	dbPort := os.Getenv("POSTGRES_PORT")
 	database := os.Getenv("POSTGRES_DB")
-	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=verify-ca pool_max_conns=10", userName, password, host, dbPort, database)
+	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=allow pool_max_conns=10", userName, password, host, dbPort, database)
 	// dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", userName, password, host, dbPort, database)
 	dbpool, err := pgxpool.New(context.Background(), dsn)
 	if err != nil {
