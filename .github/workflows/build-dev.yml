@@ -159,6 +159,9 @@ jobs:
           echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Download task definition
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ vars.TF_VAR_ECRREPO }}
         if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
         run: |
           aws ecs describe-task-definition --task-definition $REPOSITORY --query taskDefinition > task-definition.json

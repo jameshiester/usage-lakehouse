@@ -87,7 +87,7 @@ resource "aws_ecs_service" "mswebapp" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.mswebapp.arn
-    container_name   = "mswebapp"
+    container_name   = "go-api"
     container_port   = 80
   }
 
