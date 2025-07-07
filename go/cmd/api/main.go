@@ -201,6 +201,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Get("/healthz", healthCheck)
+	r.Get("/", healthCheck)
 	r.Post("/accounts", accountHandler.CreateAccount)
 	r.Get("/accounts/{id}", accountHandler.GetAccount)
 	r.Put("/accounts/{id}", accountHandler.UpdateAccount)
