@@ -35,8 +35,8 @@ jobs:
       TF_VAR_ECRRepo: ${{ vars.TF_VAR_ECRREPO }}
       TF_VAR_ImageTag: ${{ vars.TF_VAR_IMAGETAG }}
       TF_VAR_DBInstanceSize: ${{ vars.TF_VAR_DBINSTANCESIZE }}
-      TV_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
-      TV_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
+      TF_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
+      TF_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -50,10 +50,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '^1.24.4'
-
-      - name: echo
-        run:
-          echo $TF_VAR_ECSCluster
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -109,8 +105,8 @@ jobs:
       TF_VAR_EnvTag: ${{ vars.TF_VAR_ENVTAG }}
       TF_VAR_VPCCIDR: ${{ vars.TF_VAR_VPCCIDR }}
       TF_VAR_ECRRepo: ${{ vars.TF_VAR_ECRREPO }}
-      TV_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
-      TV_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
+      TF_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
+      TF_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
       IMAGE_TAG: ${{github.sha}}
 
     steps:

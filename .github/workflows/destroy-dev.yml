@@ -35,8 +35,8 @@ jobs:
       TF_VAR_ECRRepo: ${{ vars.TF_VAR_ECRREPO }}
       TF_VAR_ImageTag: ${{ vars.TF_VAR_IMAGETAG }}
       TF_VAR_DBInstanceSize: ${{ vars.TF_VAR_DBINSTANCESIZE }}
-      TV_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
-      TV_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
+      TF_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER }}
+      TF_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE }}
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
