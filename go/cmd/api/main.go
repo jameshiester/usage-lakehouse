@@ -96,7 +96,7 @@ func main() {
 	r.Get("/accounts", accountHandler.ListAccounts)
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "80"
 	}
 	log.Printf("Server started on port :%s", port)
 	if err := http.ListenAndServe(":"+port, r); err != nil {
