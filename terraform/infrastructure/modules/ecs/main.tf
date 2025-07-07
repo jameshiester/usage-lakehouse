@@ -63,7 +63,7 @@ resource "aws_ecs_task_definition" "mswebapp" {
         intervalSeconds = 30
         timeoutSeconds  = 5
         retries         = 3
-        startPeriod     = 60
+        startPeriod     = 30
       }
     }
   ])
