@@ -180,6 +180,7 @@ func main() {
 			log.Fatal("error unmarshaling password data")
 		}
 		password = passwordData.Password
+		userName = passwordData.Username
 	}
 	host := os.Getenv("POSTGRES_HOST")
 	dbPort := os.Getenv("POSTGRES_PORT")

@@ -13,6 +13,14 @@ resource "aws_security_group" "web01" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Http Inbound"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     description = "Web Outbound"
     from_port   = 0
@@ -80,16 +88,13 @@ resource "aws_lb" "mswebapp" {
   }
 }
 
-# Output ALB DNS name for GitHub Actions job output
-output "mswebapp_alb_dns_name" {
-  value = aws_lb.mswebapp.dns_name
-}
+
 
 # Create ALB listener
 # WARNING: Consider changing port to 443 and protocol to HTTPS for production environments 
 resource "aws_lb_listener" "mswebapp" {
   load_balancer_arn = aws_lb.mswebapp.arn
-  port              = "80"
+  port              = "8080"
   protocol          = "HTTP"
 
   default_action {
@@ -107,7 +112,7 @@ resource "aws_lb_listener" "mswebapp" {
 # WARNING: Lifecyle and name_prefix added for testing. Issue discussed here https://github.com/hashicorp/terraform-provider-aws/issues/16889
 resource "aws_lb_target_group" "mswebapp" {
   name_prefix                   = "msweb-"
-  port                          = 80
+  port                          = 8080
   protocol                      = "HTTP"
   target_type                   = "ip"
   vpc_id                        = var.VPCID

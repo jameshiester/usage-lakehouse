@@ -33,10 +33,6 @@ resource "aws_ecs_task_definition" "mswebapp" {
         }
       ]
       environment = [{
-        name  = "POSTGRES_USERNAME"
-        value = var.DBInstanceUsername
-        }
-        , {
           name  = "POSTGRES_DB"
           value = var.DBInstanceDatabaseName
           }, {
