@@ -33,14 +33,14 @@ resource "aws_ecs_task_definition" "mswebapp" {
         }
       ]
       environment = [{
-          name  = "POSTGRES_DB"
-          value = var.DBInstanceDatabaseName
-          }, {
-          name  = "POSTGRES_HOST"
-          value = var.DBHost
-        },{
-          name = "DB_MASTER_SECRET_ARN"
-          value = var.DBSecretArn
+        name  = "POSTGRES_DB"
+        value = var.DBInstanceDatabaseName
+        }, {
+        name  = "POSTGRES_HOST"
+        value = var.DBHost
+        }, {
+        name  = "DB_MASTER_SECRET_ARN"
+        value = var.DBSecretArn
         }
         , {
           name  = "POSTGRES_PORT"
@@ -55,10 +55,11 @@ resource "aws_ecs_task_definition" "mswebapp" {
         }
       }
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
+        command         = ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
         intervalSeconds = 30
         timeoutSeconds  = 5
         retries         = 3
+        startPeriod     = 60
       }
     }
   ])

@@ -75,7 +75,7 @@ resource "aws_lambda_invocation" "example" {
     args = ["up"]
   })
   triggers = {
-    hash = module.go_lambda_function.lambda_function_source_code_hash
+    hash          = module.go_lambda_function.lambda_function_source_code_hash
     last_modified = module.go_lambda_function.lambda_function_last_modified
   }
 }
