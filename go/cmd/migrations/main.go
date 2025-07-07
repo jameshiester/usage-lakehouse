@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -33,6 +34,7 @@ var (
 
 func handleRequest(ctx context.Context, event json.RawMessage) {
 	// Decode the JSON event into a struct
+	var tlsConfig *tls.Config
 	var eventData struct {
 		Args []string `json:"args"`
 	}
@@ -51,6 +53,9 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
 	fmt.Println("new aws lambda version")
 	if secretArn != "" {
+		tlsConfig = &tls.Config{
+			InsecureSkipVerify: false,
+		}
 		fmt.Printf("getting password from secret: %v\n", secretArn)
 		result, err := secretCache.GetSecretString(secretArn)
 		if err != nil {
@@ -79,11 +84,8 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 			fmt.Println("connected to pg database")
 			return nil
 		},
+		TLSConfig: tlsConfig,
 	})
-	err := db.Ping(ctx)
-	if err != nil {
-		fmt.Println("error pinging database")
-	}
 	if len(eventData.Args) == 0 || eventData.Args[0] != "init" {
 		// Check if gopg_migrations table exists
 		type TableExistsResult struct {
