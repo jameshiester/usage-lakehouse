@@ -260,7 +260,8 @@ resource "aws_iam_role_policy" "ecstask" {
     Statement = [
       {
         Action = [
-          "secretsmanager:GetSecretValue"
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
         ]
         Effect   = "Allow"
         Resource = [var.DBSecretArn]
