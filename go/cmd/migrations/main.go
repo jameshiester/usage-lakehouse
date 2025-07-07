@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -42,6 +41,10 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	}
 	userName := os.Getenv("POSTGRES_USER")
 	host := os.Getenv("POSTGRES_HOST")
+	port := os.Getenv("POSTGRES_PORT")
+	if port == "" {
+		port = "5432"
+	}
 	fmt.Printf("database host: %v\n", host)
 	database := os.Getenv("POSTGRES_DB")
 	password := os.Getenv("POSTGRES_PASSWORD")
@@ -71,13 +74,10 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 		User:     userName,
 		Database: database,
 		Password: password,
-		Addr:     host,
+		Addr:     fmt.Sprintf("%s:%s", host, port),
 		OnConnect: func(ctx context.Context, cn *pg.Conn) error {
 			fmt.Println("connected to pg database")
 			return nil
-		},
-		TLSConfig: &tls.Config{
-			InsecureSkipVerify: true,
 		},
 	})
 	err := db.Ping(ctx)
