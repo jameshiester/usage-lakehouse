@@ -53,7 +53,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
 	if secretArn != "" {
 		tlsConfig = &tls.Config{
-			InsecureSkipVerify: false,
+			InsecureSkipVerify: true,
 		}
 		fmt.Printf("getting password from secret: %v\n", secretArn)
 		result, err := secretCache.GetSecretString(secretArn)
