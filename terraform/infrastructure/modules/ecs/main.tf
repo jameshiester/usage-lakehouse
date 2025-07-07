@@ -42,14 +42,13 @@ resource "aws_ecs_task_definition" "mswebapp" {
           }, {
           name  = "POSTGRES_HOST"
           value = var.DBHost
+        },{
+          name = "DB_MASTER_SECRET_ARN"
+          value = var.DBSecretArn
         }
         , {
           name  = "POSTGRES_PORT"
           value = var.DBInstancePort
-      }]
-      secrets = [{
-        name      = "POSTGRES_PASSWORD"
-        valueFrom = var.DBSecretArn
       }]
       logconfiguration = {
         logDriver = "awslogs",

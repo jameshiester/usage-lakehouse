@@ -16,6 +16,8 @@ import (
 	"usage-lakehouse/internal/model"
 	"usage-lakehouse/internal/repository"
 
+	"github.com/aws/aws-secretsmanager-caching-go/secretcache"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/go-chi/chi/v5"
@@ -32,6 +34,10 @@ type Response struct {
 	Message  string `json:"message"`
 	S3Object string `json:"s3_object,omitempty"`
 }
+
+var (
+	secretCache, _ = secretcache.New()
+)
 
 func parseCSV(r io.Reader) ([]model.UsageData, error) {
 	reader := csv.NewReader(r)
@@ -157,6 +163,24 @@ func healthCheck(w http.ResponseWriter, r *http.Request) {
 func main() {
 	userName := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
+	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
+	if secretArn != "" {
+		fmt.Printf("getting password from secret: %v\n", secretArn)
+		result, err := secretCache.GetSecretString(secretArn)
+		if err != nil {
+			fmt.Printf("error retrieving database secret: %v\n", err)
+			log.Fatal("error retrieving database secret")
+		}
+		var passwordData struct {
+			Password string `json:"password"`
+			Username string `json:"username"`
+		}
+		if err := json.Unmarshal([]byte(result), &passwordData); err != nil {
+			fmt.Printf("error retrieving database secret: %v\n", err)
+			log.Fatal("error unmarshaling password data")
+		}
+		password = passwordData.Password
+	}
 	host := os.Getenv("POSTGRES_HOST")
 	dbPort := os.Getenv("POSTGRES_PORT")
 	database := os.Getenv("POSTGRES_DB")

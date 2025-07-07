@@ -51,7 +51,6 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 	database := os.Getenv("POSTGRES_DB")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
-	fmt.Println("new aws lambda version")
 	if secretArn != "" {
 		tlsConfig = &tls.Config{
 			InsecureSkipVerify: false,
@@ -73,8 +72,9 @@ func handleRequest(ctx context.Context, event json.RawMessage) {
 		password = passwordData.Password
 	}
 
-	fmt.Printf("Host: %s, Password: %s, Database: %s\n", host, password, database)
-
+	if tlsConfig != nil {
+		fmt.Println("Skipping tls verification...")
+	}
 	db := pg.Connect(&pg.Options{
 		User:     userName,
 		Database: database,
