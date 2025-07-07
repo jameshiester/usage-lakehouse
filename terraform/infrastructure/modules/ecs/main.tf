@@ -41,6 +41,10 @@ resource "aws_ecs_task_definition" "mswebapp" {
         }, {
         name  = "DB_MASTER_SECRET_ARN"
         value = var.DBSecretArn
+        },
+         {
+        name  = "POSTGRES_USER"
+        value = var.DBInstanceUsername
         }
         , {
           name  = "POSTGRES_PORT"
