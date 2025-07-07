@@ -58,6 +58,12 @@ resource "aws_ecs_task_definition" "mswebapp" {
           awslogs-stream-prefix = "awslogs-"
         }
       }
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
+        intervalSeconds = 30
+        timeoutSeconds  = 5
+        retries         = 3
+      }
     }
   ])
 }
