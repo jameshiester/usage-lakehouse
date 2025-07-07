@@ -36,6 +36,8 @@ jobs:
       TF_VAR_ECRRepo: ${{ vars.TF_VAR_ECRREPO }}
       TF_VAR_ImageTag: ${{ vars.TF_VAR_IMAGETAG }}
       TF_VAR_DBInstanceSize: ${{ vars.TF_VAR_DBINSTANCESIZE }}
+      TV_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER}}
+      TV_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE}}
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -97,8 +99,6 @@ jobs:
       name: dev
     env:
       TF_VAR_Region: ${{ vars.TF_VAR_REGION }}
-      TF_VAR_AZ01: ${{ vars.TF_VAR_AZ01 }}
-      TF_VAR_AZ02: ${{ vars.TF_VAR_AZ02 }}
       TF_VAR_Prefix: ${{ vars.TF_VAR_PREFIX }}
       TF_VAR_SolTag: ${{ vars.TF_VAR_SOLTAG }}
       TF_VAR_GitHubRepo: ${{ vars.TF_VAR_GITHUBREPO }}
@@ -106,8 +106,9 @@ jobs:
       TF_VAR_EnvTag: ${{ vars.TF_VAR_ENVTAG }}
       TF_VAR_VPCCIDR: ${{ vars.TF_VAR_VPCCIDR }}
       TF_VAR_ECRRepo: ${{ vars.TF_VAR_ECRREPO }}
-      TF_VAR_ImageTag: ${{ vars.TF_VAR_IMAGETAG }}
-      TF_VAR_DBInstanceSize: ${{ vars.TF_VAR_DBINSTANCESIZE }}
+      TV_VAR_ECSCluster: ${{ vars.TF_VAR_ECSCLUSTER}}
+      TV_VAR_ECSService: ${{ vars.TF_VAR_ECSSERVICE}}
+      IMAGE_TAG: ${{github.sha}}
 
     steps:
       - name: Git checkout
@@ -123,7 +124,7 @@ jobs:
       - name: Check ECS image exists
         id: ecsimage
         run: |
-          if aws ecr describe-images --repository-name ${{ vars.TF_VAR_ECRREPO }} --image-ids imageTag=${{ vars.TF_VAR_IMAGETAG }} >/dev/null 2>&1
+          if aws ecr describe-images --repository-name ${{ vars.TF_VAR_ECRREPO }} --image-ids imageTag=$IMAGE_TAG >/dev/null 2>&1
           then
             echo "image_exists=true" >> "$GITHUB_ENV"
           else
@@ -146,14 +147,42 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push docker image to Amazon ECR
+        id: build-image
         if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ vars.TF_VAR_ECRREPO }}
-          IMAGE_TAG: ${{ vars.TF_VAR_IMAGETAG }}
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./go/API.Dockerfile .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker tag $REGISTRY/$REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:latest
+          docker push $REGISTRY/$REPOSITORY:latest
+          echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Print Web App URL in Job Summary
-        run: echo "${{ vars.TF_VAR_ENVTAG }}) :rocket:" >> $GITHUB_STEP_SUMMARY
+      - name: Download task definition
+        if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
+        run: |
+          aws ecs describe-task-definition --task-definition $REPOSITORY --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: go-api
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
+        env:
+          SERVICE: ${{ vars.TF_VAR_ECSSERVICE  }}
+          CLUSTER: ${{ vars.TF_VAR_ECSCLUSTER  }}
+          REPOSITORY: ${{ vars.TF_VAR_ECRREPO }}
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: $SERVICE
+          cluster: $CLUSTER
+          wait-for-service-stability: true
+

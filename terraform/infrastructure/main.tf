@@ -158,8 +158,9 @@ module "ecs" {
   DBHost             = module.db.db_instance_address
   DBInstancePort     = module.db.db_instance_port
   DBInstanceUsername = module.db.db_instance_username
-  ImageTag           = var.ImageTag
   ECRRepo            = var.ECRRepo
   PublicSubnets      = module.vpc.public_subnets
   PrivateSubnets     = module.vpc.private_subnets
+  ECSCluster         = var.ECSCluster
+  ECSService         = var.ECSService
 }

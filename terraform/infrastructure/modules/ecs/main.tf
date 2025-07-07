@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_ecs_task_definition" "mswebapp" {
-  family                   = format("%s%s%s", var.Prefix, "ect", var.EnvCode)
+  family                   = var.ECRRepo
   requires_compatibilities = ["FARGATE"]
   cpu                      = 1024
   memory                   = 2048
@@ -19,8 +19,8 @@ resource "aws_ecs_task_definition" "mswebapp" {
   task_role_arn            = aws_iam_role.ecstask.arn
   container_definitions = jsonencode([
     {
-      name                   = "mswebapp"
-      image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.Region}.amazonaws.com/${var.ECRRepo}:${var.ImageTag}"
+      name                   = "go-api"
+      image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.Region}.amazonaws.com/${var.ECRRepo}:latest"
       cpu                    = 256
       memory                 = 512
       essential              = true
@@ -42,9 +42,9 @@ resource "aws_ecs_task_definition" "mswebapp" {
         name  = "DB_MASTER_SECRET_ARN"
         value = var.DBSecretArn
         },
-         {
-        name  = "POSTGRES_USER"
-        value = var.DBInstanceUsername
+        {
+          name  = "POSTGRES_USER"
+          value = var.DBInstanceUsername
         }
         , {
           name  = "POSTGRES_PORT"
