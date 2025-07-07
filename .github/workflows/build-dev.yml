@@ -113,6 +113,13 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.TF_VAR_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: GitHub-Actions-OIDC-TERRAFORM 
+
       - name: Check ECS image exists
         id: ecsimage
         run: |
