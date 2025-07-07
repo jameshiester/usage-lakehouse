@@ -35,7 +35,7 @@ type ErcotQuantityDelivered struct {
 }
 
 type ErcotProductTransferDetail struct {
-	TransferType       ProductTransferDetailTypeCode `json:"product_transfer_detail_type_code"`
+	TransferType       ProductTransferDetailTypeCode `json:"product_transfer_detail_type_code"   validate:"required"`
 	ServicePeriodStart *time.Time                    `json:"service_period_start,omitempty"`
 	ServicePeriodEnd   *time.Time                    `json:"service_period_end,omitempty"`
 	ExchangeDate       *time.Time                    `json:"exchange_date,omitempty"`
@@ -50,7 +50,7 @@ type ErcotMonthlyUsageTransaction struct {
 	TransactionID          string                       `json:"transaction_id"  validate:"required"`
 	Purpose                TransactionSetPurposeCode    `json:"transaction_set_purpose_code"   validate:"required"`
 	Date                   time.Time                    `json:"date"  validate:"required"`
-	EsiID                  string                       `json:"esi_id"  validate:"required"`
+	PremiseCode            string                       `json:"premise_code"  validate:"required"`
 	PowerRegion            string                       `json:"power_region"  validate:"required"`
 	ReportType             ReportTypeCode               `json:"report_type_code"  validate:"required"`
 	Final                  *string                      `json:"action_code,omitempty"`

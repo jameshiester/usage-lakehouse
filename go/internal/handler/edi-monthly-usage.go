@@ -60,12 +60,12 @@ func (h *EDIMonthlyUsageHandler) CreateEDIMonthlyUsage(w http.ResponseWriter, r 
 		return
 	}
 	powerRegion := powerRegionMap[input.PowerRegion]
-	tdsp, err := h.tdspRepo.GetByName(r.Context(), input.TdspName)
+	tdsp, err := h.tdspRepo.GetByLegalID(r.Context(), input.TdspLegalID)
 	if err != nil || tdsp == nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	premise, err := h.premiseRepo.GetByCode(r.Context(), input.EsiID)
+	premise, err := h.premiseRepo.GetByCode(r.Context(), input.PremiseCode)
 	if err != nil || premise == nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

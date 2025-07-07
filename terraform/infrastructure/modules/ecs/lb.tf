@@ -94,7 +94,7 @@ resource "aws_lb" "mswebapp" {
 # WARNING: Consider changing port to 443 and protocol to HTTPS for production environments 
 resource "aws_lb_listener" "mswebapp" {
   load_balancer_arn = aws_lb.mswebapp.arn
-  port              = "8080"
+  port              = "80"
   protocol          = "HTTP"
 
   default_action {
@@ -112,7 +112,7 @@ resource "aws_lb_listener" "mswebapp" {
 # WARNING: Lifecyle and name_prefix added for testing. Issue discussed here https://github.com/hashicorp/terraform-provider-aws/issues/16889
 resource "aws_lb_target_group" "mswebapp" {
   name_prefix                   = "msweb-"
-  port                          = 8080
+  port                          = 80
   protocol                      = "HTTP"
   target_type                   = "ip"
   vpc_id                        = var.VPCID

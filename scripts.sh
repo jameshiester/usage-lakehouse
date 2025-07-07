@@ -27,6 +27,9 @@ case "$1" in
   docker-down)
     docker-compose down
     ;;
+  docker-build-api)
+    docker build -f ./go/API.Dockerfile -t go-api .
+    ;;
   docker-build)
     docker build --progress=plain --no-cache -f Postgres.dockerfile -t postgres-custom .
     ;;

@@ -10,6 +10,7 @@ import (
 type TDSPRepository interface {
 	Create(ctx context.Context, t *dbentity.TDSP) error
 	GetByID(ctx context.Context, id string) (*dbentity.TDSP, error)
+	GetByLegalID(ctx context.Context, legalID string) (*dbentity.TDSP, error)
 	GetByName(ctx context.Context, name string) (*dbentity.TDSP, error)
 	Update(ctx context.Context, t *dbentity.TDSP) error
 	Delete(ctx context.Context, id string) error
@@ -35,6 +36,16 @@ func (r *tdspRepositorySQL) Create(ctx context.Context, t *dbentity.TDSP) error 
 func (r *tdspRepositorySQL) GetByID(ctx context.Context, id string) (*dbentity.TDSP, error) {
 	var t dbentity.TDSP
 	err := r.db.QueryRow(ctx, `SELECT id, name, code, legal_id, premise_code_validation_expression, created, updated FROM tdsp WHERE id=$1`, id).
+		Scan(&t.ID, &t.Name, &t.Code, &t.LegalID, &t.PremiseCodeValidationExpression, &t.Created, &t.Updated)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+func (r *tdspRepositorySQL) GetByLegalID(ctx context.Context, legalID string) (*dbentity.TDSP, error) {
+	var t dbentity.TDSP
+	err := r.db.QueryRow(ctx, `SELECT id, name, code, legal_id, premise_code_validation_expression, created, updated FROM tdsp WHERE legal_id=$1`, legalID).
 		Scan(&t.ID, &t.Name, &t.Code, &t.LegalID, &t.PremiseCodeValidationExpression, &t.Created, &t.Updated)
 	if err != nil {
 		return nil, err

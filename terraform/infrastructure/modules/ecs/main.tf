@@ -27,8 +27,8 @@ resource "aws_ecs_task_definition" "mswebapp" {
       readonlyRootFilesystem = true
       portMappings = [
         {
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = 80
+          hostPort      = 80
           protocol      = "tcp"
         }
       ]
@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "mswebapp" {
         }
       }
       healthCheck = {
-        command         = ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
+        command         = ["CMD-SHELL", "curl -f http://localhost:80/healthz || exit 1"]
         intervalSeconds = 30
         timeoutSeconds  = 5
         retries         = 3
@@ -88,7 +88,7 @@ resource "aws_ecs_service" "mswebapp" {
   load_balancer {
     target_group_arn = aws_lb_target_group.mswebapp.arn
     container_name   = "mswebapp"
-    container_port   = 8080
+    container_port   = 80
   }
 
   tags = {
