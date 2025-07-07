@@ -178,13 +178,9 @@ jobs:
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         if: steps.filter.outputs.go == 'true' || env.image_exists == 'false'
-        env:
-          SERVICE: ${{ vars.TF_VAR_ECSSERVICE  }}
-          CLUSTER: ${{ vars.TF_VAR_ECSCLUSTER  }}
-          REPOSITORY: ${{ vars.TF_VAR_ECRREPO }}
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: $SERVICE
-          cluster: $CLUSTER
+          service: ${{ vars.TF_VAR_ECSSERVICE  }}
+          cluster: ${{ vars.TF_VAR_ECSCLUSTER  }}
           wait-for-service-stability: true
 
