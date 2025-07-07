@@ -153,6 +153,7 @@ type HealthResponse struct {
 }
 
 func healthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("health check")
 	w.Header().Set("Content-Type", "application/json")
 	response := HealthResponse{
 		Status: "Success",
@@ -164,7 +165,6 @@ func main() {
 	userName := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	secretArn := os.Getenv("DB_MASTER_SECRET_ARN")
-	fmt.Printf("task version 2")
 	if secretArn != "" {
 		fmt.Printf("getting password from secret: %v\n", secretArn)
 		result, err := secretCache.GetSecretString(secretArn)
