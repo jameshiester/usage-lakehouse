@@ -13,6 +13,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:AssociateVpcCidrBlock",
       "ec2:CreateEgressOnlyInternetGateway",
       "ec2:CreateTags",
+      "cloudformation:UpdateResource",
       "ec2:CreateVpcEndpoint",
       "ec2:CreateVpcEndpointServiceConfiguration",
       "ec2:DeleteEgressOnlyInternetGateway",
