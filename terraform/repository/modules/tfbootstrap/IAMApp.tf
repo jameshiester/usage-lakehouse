@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:AssociateVpcCidrBlock",
       "ec2:CreateEgressOnlyInternetGateway", 
       "ec2:DescribeEgressOnlyInternetGateways",
-      "ec2:DeleteEgressOnlyInternetGateways",
+      "ec2:DeleteEgressOnlyInternetGateway",
       "ec2:CreateTags",
       "ec2:CreateVpcEndpoint",
       "ec2:CreateVpcEndpointServiceConfiguration",
