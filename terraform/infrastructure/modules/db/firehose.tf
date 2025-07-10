@@ -205,6 +205,9 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     tables = {
       include = ["account"]
     }
+    database_source_vpc_configuration = {
+        vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.name
+    }
     database_source_authentication_configuration = {
       secrets_manager_configuration = {
         enabled    = true
@@ -212,7 +215,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
         secret_arn = module.db.db_instance_domain_auth_secret_arn
 
       }
-      vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.name
+
     }
     databases = {
       include = [var.DBInstanceDatabaseName]
