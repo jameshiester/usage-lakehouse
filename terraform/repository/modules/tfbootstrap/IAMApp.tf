@@ -61,6 +61,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "elasticloadbalancing:DescribeTags",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
+      "elasticloadbalancing:DescribeTargetHealth",
       "elasticloadbalancing:RegisterTargets",
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
@@ -83,14 +84,14 @@ data "aws_iam_policy_document" "SampleApp" {
       "SNS:AddPermission",
       "SNS:CreateTopic",
       "SNS:DeleteTopic",
-      "SNS:GetTopicAttributes",
       "SNS:GetSubscriptionAttributes",
+      "SNS:GetTopicAttributes",
       "SNS:ListSubscriptionsByTopic",
       "SNS:ListTagsForResource",
       "sns:RemovePermission",
       "SNS:SetTopicAttributes",
-      "SNS:Unsubscribe",
-      "SNS:Subscribe"
+      "SNS:Subscribe",
+      "SNS:Unsubscribe"
     ]
     resources = [
       "*"
