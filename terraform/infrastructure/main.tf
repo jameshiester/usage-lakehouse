@@ -37,7 +37,6 @@ module "vpc" {
   cidr               = local.vpc_cidr
   enable_nat_gateway = true
   single_nat_gateway = true
-  enable_ipv6        = true
 
   enable_dns_hostnames = true
   enable_dns_support   = true
