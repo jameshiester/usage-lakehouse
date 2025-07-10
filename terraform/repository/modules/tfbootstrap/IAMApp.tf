@@ -55,6 +55,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "elasticloadbalancing:CreateListener",
       "elasticloadbalancing:CreateLoadBalancer",
       "elasticloadbalancing:DeregisterTargets",
+      "cloudformation:CreateResource",
+      "cloudformation:DeleteResource",
       "elasticloadbalancing:DescribeListenerAttributes",
       "elasticloadbalancing:DescribeListeners",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
