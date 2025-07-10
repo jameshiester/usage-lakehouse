@@ -134,7 +134,7 @@ module "db" {
   Region                     = var.Region
   Prefix                     = var.Prefix
   VPCID                      = module.vpc.vpc_id
-  VPCDatabaseSubnetGroup     = module.vpc.database_subnet_group
+  VPCDatabaseSubnetGroup     = module.vpc.database_subnet_objects[0].id
   VPCDatabaseSubnetGroupName = module.vpc.database_subnet_group_name
   GitHubRepo                 = var.GitHubRepo
   SolTag                     = var.SolTag
