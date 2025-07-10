@@ -82,6 +82,10 @@ module "db" {
       value = 1
     },
     {
+      name  = "rds.logical_replication"
+      value = 1
+    },
+    {
       name  = "client_encoding"
       value = "utf8"
     }

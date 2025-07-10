@@ -187,7 +187,7 @@ resource "aws_vpc_endpoint_service" "rds_lb_endpoint_service" {
   network_load_balancer_arns = [aws_lb.rds_lb.arn]
 
   supported_regions = [var.Region]
-  allowed_principals = ["arn:aws:iam::${ data.aws_caller_identity.current.account_id}:root"]
+  allowed_principals = ["firehose.amazonaws.com"]
 
   tags = {
     Name = format("%s-%s-%s", var.Prefix, "rds-endpoint", var.EnvCode)
