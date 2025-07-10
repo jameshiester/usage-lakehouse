@@ -179,7 +179,7 @@ resource "awscc_iam_role" "firehose" {
   assume_role_policy_document = jsonencode(jsondecode(data.aws_iam_policy_document.firehose_assume_role.json))
   managed_policy_arns         = []
   path                        = "/"
-  tags = local.tags
+  tags                        = [{ key = "Envrionment", value = var.EnvTag }]
 }
 
 resource "awscc_iam_role_policy" "firehose" {
@@ -196,28 +196,28 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     s3_configuration = {
       bucket_arn = aws_s3_bucket.storage.arn
     }
-    role_arn            = awscc_iam_role.firehose.arn
+    role_arn = awscc_iam_role.firehose.arn
   }
   database_source_configuration = {
     columns = {
-        include = ["*"]
+      include = ["*"]
     }
     tables = {
-        include = ["account"]
+      include = ["account"]
     }
     database_source_authentication_configuration = {
       secrets_manager_configuration = {
-        enabled = true
-        role_arn = awscc_iam_role.firehose.arn
+        enabled    = true
+        role_arn   = awscc_iam_role.firehose.arn
         secret_arn = module.db.db_instance_domain_auth_secret_arn
-        
+
       }
       vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.name
     }
     databases = {
-        include = [var.DBInstanceDatabaseName]
+      include = [var.DBInstanceDatabaseName]
     }
 
   }
-  tags = [{key = "Envrionment",value= var.EnvTag}]
+  tags = [{ key = "Envrionment", value = var.EnvTag }]
 }
