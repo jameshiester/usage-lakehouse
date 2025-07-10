@@ -7,6 +7,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "cloudformation:DescribeStacks",
       "ec2:AcceptVpcEndpointConnections",
       "ec2:CreateTags",
+      "ec2:AssociateVpcCidrBlock",
       "ec2:CreateVpcEndpoint",
       "ec2:CreateVpcEndpointServiceConfiguration",
       "ec2:DeleteVpcEndpoints",
@@ -72,7 +73,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "logs:DescribeLogGroups",
       "logs:ListTagsForResource",
       "resource-groups:CreateGroup",
-      "resource-groups:UpdateGroupQuery"
+      "resource-groups:UpdateGroupQuery",
+      "SNS:CreateTopic"
     ]
     resources = [
       "*"
