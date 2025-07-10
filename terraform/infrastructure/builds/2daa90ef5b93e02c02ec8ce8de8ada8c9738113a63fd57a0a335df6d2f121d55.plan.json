@@ -1,1 +1,0 @@
-{"filename": "builds\\2daa90ef5b93e02c02ec8ce8de8ada8c9738113a63fd57a0a335df6d2f121d55.zip", "runtime": "provided.al2023", "artifacts_dir": "builds", "build_plan": [[["set:filter", ["!.*", "bootstrap"]], ["set:workdir", "..\\..\\go"], ["sh", "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o bootstrap cmd/migrations/main.go"], ["zip:embedded"]]]}
