@@ -206,7 +206,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
       include = ["account"]
     }
     database_source_vpc_configuration = {
-        vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.name
+        vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.service_name
     }
     database_source_authentication_configuration = {
       secrets_manager_configuration = {
