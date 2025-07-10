@@ -188,48 +188,61 @@ resource "awscc_iam_role_policy" "firehose" {
   role_name       = awscc_iam_role.firehose.role_name
 }
 
-# Create the Kinesis Firehose Delivery Stream
-resource "awscc_kinesisfirehose_delivery_stream" "example" {
-  delivery_stream_name = format("%s-%s-%s", var.Prefix, "usage-lakehouse", var.EnvCode)
-  iceberg_destination_configuration = {
-    append_only = false
-    s3_configuration = {
-      bucket_arn = aws_s3_bucket.storage.arn
-      role_arn = awscc_iam_role.firehose.arn
-    }
-    role_arn = awscc_iam_role.firehose.arn
-    catalog_configuration = {
-        catalog_arn = "arn:aws:glue:${var.Region}:${data.aws_caller_identity.current.account_id}:catalog"
-    }
-  }
-  database_source_configuration = {
-    columns = {
-      include = ["*"]
-    }
-    tables = {
-      include = ["account"]
-    }
-    database_source_vpc_configuration = {
-        vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.service_name
-    }
-    port = module.db.db_instance_port
-    endpoint = module.db.db_instance_endpoint
-    type = "PostgreSQL"
-    snapshot_watermark_table = "public.firehose_snapshot_table"
-    database_source_authentication_configuration = {
-      secrets_manager_configuration = {
-        enabled    = true
-        role_arn   = awscc_iam_role.firehose.arn
-        secret_arn = module.db.db_instance_master_user_secret_arn
+# # Create the Kinesis Firehose Delivery Stream
+# resource "awscc_kinesisfirehose_delivery_stream" "example" {
+#   delivery_stream_name = format("%s-%s-%s", var.Prefix, "usage-lakehouse", var.EnvCode)
+#   iceberg_destination_configuration = {
+#     append_only = false
+#     s3_configuration = {
+#       bucket_arn = aws_s3_bucket.storage.arn
+#       role_arn   = awscc_iam_role.firehose.arn
+#     }
+#     role_arn = awscc_iam_role.firehose.arn
+#     catalog_configuration = {
+#       catalog_arn = "arn:aws:glue:${var.Region}:${data.aws_caller_identity.current.account_id}:catalog"
+#     }
+#     precessing_configuration = {
+#       enabled = true
+#       processors = {
+#         type = "MetadataExtraction"
+#         parameters = {
+#           parameter_name  = "JsonParsingEngine"
+#           parameter_value = "JQ-1.6"
+#         }
+#         parameters = {
+#           parameter_name  = "MetadataExtractionQuery"
+#           parameter_value = "{destinationDatabaseName: \"postgres\", destinationTableName: .tableinfo.name, operation: \"insert\"}"
+#         }
+#     } }
+#   }
+#   database_source_configuration = {
+#     columns = {
+#       include = ["*"]
+#     }
+#     tables = {
+#       include = ["account"]
+#     }
+#     database_source_vpc_configuration = {
+#       vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.service_name
+#     }
+#     port                     = module.db.db_instance_port
+#     endpoint                 = module.db.db_instance_endpoint
+#     type                     = "PostgreSQL"
+#     snapshot_watermark_table = "public.firehose_snapshot_table"
+#     database_source_authentication_configuration = {
+#       secrets_manager_configuration = {
+#         enabled    = true
+#         role_arn   = awscc_iam_role.firehose.arn
+#         secret_arn = module.db.db_instance_master_user_secret_arn
 
-      }
+#       }
 
-    }
-    
-    databases = {
-      include = [var.DBInstanceDatabaseName]
-    }
+#     }
 
-  }
-  tags = [{ key = "Envrionment", value = var.EnvTag }]
-}
+#     databases = {
+#       include = [var.DBInstanceDatabaseName]
+#     }
+
+#   }
+#   tags = [{ key = "Envrionment", value = var.EnvTag }]
+# }
