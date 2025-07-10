@@ -48,7 +48,7 @@ resource "aws_lb" "rds_lb" {
 }
 
 # Create listeners for each RDS instance, mapping each to its respective target group
-resource "aws_lb_listener" "mz_rds_listener" {
+resource "aws_lb_listener" "rds_listener" {
 
   load_balancer_arn = aws_lb.mz_rds_lb.arn
   port              = module.db.db_instance_port
