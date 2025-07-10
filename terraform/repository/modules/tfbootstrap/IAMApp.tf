@@ -4,7 +4,11 @@ data "aws_caller_identity" "current" {}
 data "aws_iam_policy_document" "SampleApp" {
   statement {
     actions = [
+      "cloudformation:CreateResource",
+      "cloudformation:DeleteResource",
       "cloudformation:DescribeStacks",
+      "cloudformation:GetResource",
+      "cloudformation:GetResourceRequestStatus",
       "ec2:AcceptVpcEndpointConnections",
       "ec2:AssociateVpcCidrBlock",
       "ec2:CreateEgressOnlyInternetGateway",
@@ -14,6 +18,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "ec2:DeleteEgressOnlyInternetGateway",
       "ec2:DeleteVpcEndpoints",
       "ec2:DeleteVpcEndpointServiceConfiguration",
+      "ec2:DeleteVpcEndpointServiceConfigurations",
       "ec2:DescribeAccountAttributes",
       "ec2:DescribeAddresses",
       "ec2:DescribeAddressesAttribute",
@@ -54,10 +59,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "ecs:DescribeTaskDefinition",
       "elasticloadbalancing:CreateListener",
       "elasticloadbalancing:CreateLoadBalancer",
+      "elasticloadbalancing:DeleteListener",
       "elasticloadbalancing:DeregisterTargets",
-      "cloudformation:CreateResource",
-      "cloudformation:DeleteResource",
-      "cloudformation:GetResourceRequestStatus",
       "elasticloadbalancing:DescribeListenerAttributes",
       "elasticloadbalancing:DescribeListeners",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
