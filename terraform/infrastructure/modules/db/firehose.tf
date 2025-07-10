@@ -220,7 +220,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
       secrets_manager_configuration = {
         enabled    = true
         role_arn   = awscc_iam_role.firehose.arn
-        secret_arn = module.db.db_instance_domain_auth_secret_arn
+        secret_arn = module.db.db_instance_master_user_secret_arn
 
       }
 
