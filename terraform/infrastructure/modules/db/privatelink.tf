@@ -41,7 +41,7 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
 data "aws_subnet" "selected" {
   filter {
     name   = "tag:Name"
-    values = [var.VPCDatabaseSubnetGroup]
+    values = [var.VPCDatabaseSubnetGroupName]
   }
 }
 
