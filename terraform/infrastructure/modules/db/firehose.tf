@@ -214,6 +214,10 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
       }
       vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.name
     }
+    databases = {
+        include = [var.DBInstanceDatabaseName]
+    }
+
   }
-  tags = local.tags
+  tags = [{key = "Envrionment",value= var.EnvTag}]
 }
