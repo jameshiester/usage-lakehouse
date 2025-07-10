@@ -89,6 +89,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "SNS:ListTagsForResource",
       "sns:RemovePermission",
       "SNS:SetTopicAttributes",
+      "SNS:Unsubscribe",
       "SNS:Subscribe"
     ]
     resources = [

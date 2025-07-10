@@ -38,11 +38,18 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
   depends_on = [aws_lb_target_group.rds_target_group]
 }
 
+data "aws_subnet" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = [var.VPCDatabaseSubnetGroup]
+  }
+}
+
 resource "aws_lb" "rds_lb" {
   name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
   internal                         = true
   load_balancer_type               = "network"
-  subnets                          = [var.VPCDatabaseSubnetGroup]
+  subnets                          = [data.aws_subnet.selected.id]
   enable_cross_zone_load_balancing = true
   tags                             = local.tags
 }
