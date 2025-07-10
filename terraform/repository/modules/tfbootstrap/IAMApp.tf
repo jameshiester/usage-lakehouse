@@ -77,6 +77,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "resource-groups:CreateGroup",
       "resource-groups:UpdateGroupQuery",
       "SNS:CreateTopic",
+      "SNS:GetTopicAttributes",
       "SNS:SetTopicAttributes"
     ]
     resources = [
