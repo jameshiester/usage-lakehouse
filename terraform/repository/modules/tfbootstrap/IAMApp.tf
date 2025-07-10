@@ -61,6 +61,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "elasticloadbalancing:DescribeTags",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
+      "elasticloadbalancing:RegisterTargets",
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
       "kms:CreateKey",
