@@ -57,7 +57,7 @@ func (r *accountRepositorySQL) Delete(ctx context.Context, id string) error {
 }
 
 func (r *accountRepositorySQL) List(ctx context.Context) ([]model.Account, error) {
-	rows, err := r.db.Query(ctx, `SELECT id, legal_id, name, created_dttm, updated_dttm FROM public.account`)
+	rows, err := r.db.Query(ctx, `SELECT id, legal_id, name, created_dttm, updated_dttm FROM account`)
 	if err != nil {
 		return nil, err
 	}

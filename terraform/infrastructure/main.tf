@@ -130,18 +130,19 @@ module "vpc_endpoints" {
 }
 
 module "db" {
-  source                 = "./modules/db"
-  Region                 = var.Region
-  Prefix                 = var.Prefix
-  VPCID                  = module.vpc.vpc_id
-  VPCDatabaseSubnetGroup = module.vpc.database_subnet_group
-  GitHubRepo             = var.GitHubRepo
-  SolTag                 = var.SolTag
-  DBInstanceSize         = var.DBInstanceSize
-  EnvCode                = var.EnvCode
-  VPCCIDR                = local.vpc_cidr
-  AZS                    = local.azs
-  EnvTag                 = var.EnvTag
+  source                     = "./modules/db"
+  Region                     = var.Region
+  Prefix                     = var.Prefix
+  VPCID                      = module.vpc.vpc_id
+  VPCDatabaseSubnetGroup     = module.vpc.database_subnet_group
+  VPCDatabaseSubnetGroupName = module.vpc.database_subnet_group_name
+  GitHubRepo                 = var.GitHubRepo
+  SolTag                     = var.SolTag
+  DBInstanceSize             = var.DBInstanceSize
+  EnvCode                    = var.EnvCode
+  VPCCIDR                    = local.vpc_cidr
+  AZS                        = local.azs
+  EnvTag                     = var.EnvTag
 }
 
 module "ecs" {

@@ -18,7 +18,13 @@ variable "VPCID" {
 
 # Networking
 variable "VPCDatabaseSubnetGroup" {
-  description = "Database subnet group created in the VPC"
+  description = "Database subnet group id created in the VPC"
+  type        = string
+}
+
+# Networking
+variable "VPCDatabaseSubnetGroupName" {
+  description = "Database subnet group name created in the VPC"
   type        = string
 }
 
