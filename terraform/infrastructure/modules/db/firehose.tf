@@ -195,6 +195,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     append_only = false
     s3_configuration = {
       bucket_arn = aws_s3_bucket.storage.arn
+      role_arn = awscc_iam_role.firehose.arn
     }
     role_arn = awscc_iam_role.firehose.arn
     catalog_configuration = {
@@ -211,6 +212,10 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     database_source_vpc_configuration = {
         vpc_endpoint_service_name = aws_vpc_endpoint_service.rds_lb_endpoint_service.service_name
     }
+    port = module.db.db_instance_port
+    endpoint = module.db.db_instance_endpoint
+    type = "PostgreSQL"
+    SnapshotWatermarkTable = "public.firehose_snapshot_table"
     database_source_authentication_configuration = {
       secrets_manager_configuration = {
         enabled    = true
