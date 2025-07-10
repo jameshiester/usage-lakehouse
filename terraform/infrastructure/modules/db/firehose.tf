@@ -199,7 +199,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     }
     role_arn = awscc_iam_role.firehose.arn
     catalog_configuration = {
-        catalog_id = data.aws_caller_identity.current.account_id
+        catalog_arn = "arn:aws:glue:${var.Region}:${data.aws_caller_identity.current.account_id}:catalog"
     }
   }
   database_source_configuration = {
