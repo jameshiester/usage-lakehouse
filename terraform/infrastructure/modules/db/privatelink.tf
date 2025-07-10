@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "rds_target_group" {
 }
 
 data "dns_a_record_set" "rds_ip" {
-  host     = module.db.db_instance_address
+  host = module.db.db_instance_address
 }
 
 data "aws_iam_policy_document" "lambda_assume_role_policy" {
@@ -44,7 +44,7 @@ resource "aws_lb" "rds_lb" {
   load_balancer_type               = "network"
   subnets                          = [var.VPCDatabaseSubnetGroup]
   enable_cross_zone_load_balancing = true
-  tags = local.tags
+  tags                             = local.tags
 }
 
 # Create listeners for each RDS instance, mapping each to its respective target group
@@ -95,9 +95,9 @@ resource "aws_lambda_function" "check_rds_ip" {
 
   environment {
     variables = {
-        Cluster_EndPoint = module.db.db_instance_endpoint
-        RDS_Port: module.db.db_instance_port
-        NLB_TG_ARN: aws_lb_target_group.rds_target_group.arn
+      Cluster_EndPoint = module.db.db_instance_endpoint
+      RDS_Port : module.db.db_instance_port
+      NLB_TG_ARN : aws_lb_target_group.rds_target_group.arn
     }
   }
 }
@@ -139,15 +139,15 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 
   statement {
     actions = [
-        "SNS:GetTopicAttributes",
-        "SNS:SetTopicAttributes",
-        "SNS:AddPermission",
-        "SNS:RemovePermission",
-        "SNS:DeleteTopic",
-        "SNS:Subscribe",
-        "SNS:ListSubscriptionsByTopic",
-        "SNS:Publish",
-        "SNS:Receive"
+      "SNS:GetTopicAttributes",
+      "SNS:SetTopicAttributes",
+      "SNS:AddPermission",
+      "SNS:RemovePermission",
+      "SNS:DeleteTopic",
+      "SNS:Subscribe",
+      "SNS:ListSubscriptionsByTopic",
+      "SNS:Publish",
+      "SNS:Receive"
     ]
 
     condition {
@@ -176,7 +176,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 
 
 resource "aws_sns_topic_subscription" "user_updates_sqs_target" {
-  topic_arn =  aws_sns_topic.default.arn
+  topic_arn = aws_sns_topic.default.arn
   protocol  = "lambda"
   endpoint  = aws_lambda_function.check_rds_ip.arn
 }
@@ -189,6 +189,6 @@ resource "aws_vpc_endpoint_service" "rds_lb_endpoint_service" {
   supported_regions = [var.Region]
 
   tags = {
-    Name =  format("%s-%s-%s", var.Prefix, "rds-endpoint", var.EnvCode)
+    Name = format("%s-%s-%s", var.Prefix, "rds-endpoint", var.EnvCode)
   }
 }
