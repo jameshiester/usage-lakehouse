@@ -215,7 +215,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
     port = module.db.db_instance_port
     endpoint = module.db.db_instance_endpoint
     type = "PostgreSQL"
-    SnapshotWatermarkTable = "public.firehose_snapshot_table"
+    snapshot_watermark_table = "public.firehose_snapshot_table"
     database_source_authentication_configuration = {
       secrets_manager_configuration = {
         enabled    = true
