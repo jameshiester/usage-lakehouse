@@ -84,6 +84,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "SNS:CreateTopic",
       "SNS:DeleteTopic",
       "SNS:GetTopicAttributes",
+      "SNS:GetSubscriptionAttributes",
       "SNS:ListSubscriptionsByTopic",
       "SNS:ListTagsForResource",
       "sns:RemovePermission",
