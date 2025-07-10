@@ -7,9 +7,9 @@ data "aws_iam_policy_document" "SampleApp" {
       "cloudformation:DescribeStacks",
       "ec2:AcceptVpcEndpointConnections",
       "ec2:AssociateVpcCidrBlock",
+      "ec2:CreateEgressOnlyInternetGateway",
       "ec2:CreateTags",
       "ec2:CreateVpcEndpoint",
-      "ec2:CreateEgressOnlyInternetGateway",
       "ec2:CreateVpcEndpointServiceConfiguration",
       "ec2:DeleteVpcEndpoints",
       "ec2:DeleteVpcEndpointServiceConfiguration",
@@ -76,9 +76,15 @@ data "aws_iam_policy_document" "SampleApp" {
       "logs:ListTagsForResource",
       "resource-groups:CreateGroup",
       "resource-groups:UpdateGroupQuery",
+      "SNS:AddPermission",
       "SNS:CreateTopic",
+      "SNS:DeleteTopic",
       "SNS:GetTopicAttributes",
-      "SNS:SetTopicAttributes"
+      "SNS:ListSubscriptionsByTopic",
+      "SNS:ListTagsForResource",
+      "sns:RemovePermission",
+      "SNS:SetTopicAttributes",
+      "SNS:Subscribe"
     ]
     resources = [
       "*"
