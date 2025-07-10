@@ -197,6 +197,9 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
       bucket_arn = aws_s3_bucket.storage.arn
     }
     role_arn = awscc_iam_role.firehose.arn
+    catalog_configuration = {
+        catalog_id = data.aws_caller_identity.current.account_id
+    }
   }
   database_source_configuration = {
     columns = {
@@ -217,6 +220,7 @@ resource "awscc_kinesisfirehose_delivery_stream" "example" {
       }
 
     }
+    
     databases = {
       include = [var.DBInstanceDatabaseName]
     }
