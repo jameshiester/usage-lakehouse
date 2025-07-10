@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "firehose:DescribeDeliveryStream",
       "firehose:CreateDeliveryStream",
       "firehose:DeleteDeliveryStream",
+      "firehose:TagDeliveryStream",
       "cloudformation:UpdateResource",
       "ec2:CreateVpcEndpoint",
       "ec2:CreateVpcEndpointServiceConfiguration",
