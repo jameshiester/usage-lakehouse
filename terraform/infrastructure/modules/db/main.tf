@@ -56,7 +56,7 @@ module "db" {
 
   multi_az = true
   # db_subnet_group_name   = module.vpc.database_subnet_group
-  db_subnet_group_name   = var.VPCDatabaseSubnetGroup
+  db_subnet_group_name   = var.VPCDatabaseSubnetGroupName
   vpc_security_group_ids = [module.security_group.security_group_id]
 
   maintenance_window              = "Mon:00:00-Mon:03:00"
