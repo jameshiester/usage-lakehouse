@@ -58,7 +58,7 @@ resource "aws_glue_connection" "example" {
   connection_properties = {
     JDBC_ENFORCE_SSL: "true"
     SECRET_ID = module.db.db_instance_master_user_secret_arn
-    JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}:${module.db.db_instance_port}/${var.DBInstanceDatabaseName}"
+    JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}/${var.DBInstanceDatabaseName}"
   }
 
 
