@@ -183,4 +183,5 @@ jobs:
           service: ${{ vars.TF_VAR_ECSSERVICE  }}
           cluster: ${{ vars.TF_VAR_ECSCLUSTER  }}
           wait-for-service-stability: true
+          wait-for-minutes: 7
 

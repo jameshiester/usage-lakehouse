@@ -83,7 +83,8 @@ data "aws_iam_policy_document" "firehose_s3" {
       "glue:GetDatabase",
       "glue:UpdateTable",
       "glue:CreateTable",
-      "glue:CreateDatabase"
+      "glue:CreateDatabase",
+      "glue:*"
     ]
     resources = [
       "arn:aws:glue:${var.Region}:${data.aws_caller_identity.current.account_id}:catalog",
