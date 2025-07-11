@@ -18,6 +18,8 @@ data "aws_iam_policy_document" "SampleApp" {
       "glue:DeleteDatabase",
       "ec2:CreateVpcEndpoint",
       "glue:CreateConnection",
+      "glue:GetDatabase",
+      "glue:GetConnection",
       "glue:DeleteConnection",
       "ec2:CreateVpcEndpointServiceConfiguration",
       "ec2:DeleteEgressOnlyInternetGateway",
