@@ -64,7 +64,7 @@ resource "aws_glue_connection" "example" {
   # Optional: VPC configuration
   physical_connection_requirements {
     security_group_id_list = [module.db.db_subnet_group_id]
-    subnet_id              =  [var.VPCDatabaseSubnetGroup]
+    subnet_id              =  var.VPCDatabaseSubnetGroup
   }
 }
 
