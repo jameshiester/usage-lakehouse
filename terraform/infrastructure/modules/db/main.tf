@@ -75,6 +75,7 @@ module "db" {
   monitoring_role_name            = format("%s%s%s", var.Prefix, "rds-mintoring", var.EnvCode)
   monitoring_role_use_name_prefix = true
   monitoring_role_description     = "Monitoring role for RDS database"
+  apply_immediately = true
 
   parameters = [
     {
