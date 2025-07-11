@@ -84,6 +84,7 @@ module "db" {
     {
       name  = "rds.logical_replication"
       value = 1
+      apply_method = "pending-reboot"
     },
     {
       name  = "client_encoding"
