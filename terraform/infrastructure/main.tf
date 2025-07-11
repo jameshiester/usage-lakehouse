@@ -141,6 +141,7 @@ module "db" {
   DBInstanceSize             = var.DBInstanceSize
   EnvCode                    = var.EnvCode
   VPCCIDR                    = local.vpc_cidr
+  PublicSubnet = module.vpc.public_subnets[0]
   AZS                        = local.azs
   EnvTag                     = var.EnvTag
 }

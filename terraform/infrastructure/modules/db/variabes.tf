@@ -16,6 +16,11 @@ variable "VPCID" {
   type        = string
 }
 
+variable "PublicSubnet" {
+  description = "ID of public subnet"
+  type = string
+}
+
 # Networking
 variable "VPCDatabaseSubnetGroup" {
   description = "Database subnet group id created in the VPC"
