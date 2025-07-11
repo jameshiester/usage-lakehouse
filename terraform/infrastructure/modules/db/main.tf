@@ -24,7 +24,7 @@ module "db" {
   version = "~> 6"
 
   identifier = format("%s%s%s", var.Prefix, "rds", var.EnvCode)
-
+  ca_cert_identifier = "rds-ca-rsa2048-g1"
   # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
   engine                   = "postgres"
   engine_version           = "17.5"
