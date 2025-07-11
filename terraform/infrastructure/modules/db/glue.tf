@@ -63,7 +63,7 @@ resource "aws_glue_connection" "example" {
 
   # Optional: VPC configuration
   physical_connection_requirements {
-    security_group_id_list = [module.security_group.security_group_id]
+    security_group_id_list = [module.security_group.security_group_id,module.glue_security_group.security_group_id]
     subnet_id              =  var.VPCDatabaseSubnetGroup
   }
 }
@@ -81,4 +81,28 @@ resource "aws_glue_crawler" "example" {
     connection_name = aws_glue_connection.example.name
     path            = "${var.DBInstanceDatabaseName}/public/%"
   }
+}
+
+
+
+module "glue_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
+
+  name        = format("%s%s%s%s", var.Prefix, "sg", var.EnvCode, "glue")
+  description = "Glue security group"
+  vpc_id      = var.VPCID
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "tcp"
+      description = "glue access from within VPC"
+      cidr_blocks = var.VPCCIDR
+    },
+  ]
+
+  tags = local.tags
 }
