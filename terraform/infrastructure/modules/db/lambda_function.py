@@ -61,7 +61,7 @@ def lambda_handler(event, context):
     RegisterIP = set(IPs) - set(ip_list)
     
     if DeRegisterIP:
-        print('IP: ', str(DeRegisterIP), ' will be DeRegistered from NLB Target')
+        print('IP: ', str(DeRegisterIP), ' will be Deregistered from NLB Target')
     
     if RegisterIP:
         print('IP: ', str(RegisterIP), ' will be registered to NLB Target')
