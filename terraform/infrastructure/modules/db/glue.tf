@@ -94,16 +94,9 @@ module "glue_security_group" {
   description = "Glue security group"
   vpc_id      = var.VPCID
 
-  # ingress
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 0
-      to_port     = 65535
-      protocol    = "-1"
-      description = "glue access from within VPC"
-      cidr_blocks = var.VPCCIDR
-    },
-  ]
+  ingress_with_self = [{
+    rule = "all-all"
+  }]
   # egress
   egress_with_cidr_blocks = [
     {
@@ -111,7 +104,7 @@ module "glue_security_group" {
       to_port     = 0
       protocol    = "-1"
       description = "glue access from within VPC"
-      cidr_blocks = var.VPCCIDR
+      cidr_blocks = "0.0.0.0/0"
     },
   ]
 
