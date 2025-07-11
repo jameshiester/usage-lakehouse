@@ -104,6 +104,16 @@ module "glue_security_group" {
       cidr_blocks = var.VPCCIDR
     },
   ]
+  # egress
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      description = "glue access from within VPC"
+      cidr_blocks = var.VPCCIDR
+    },
+  ]
 
   tags = local.tags
 }
