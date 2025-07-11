@@ -74,7 +74,7 @@ resource "aws_glue_catalog_database" "main" {
 
 resource "aws_glue_crawler" "example" {
   database_name = aws_glue_catalog_database.main.name
-  name          = "example"
+  name          = format("%s-%s-%s", var.Prefix, "postgres", var.EnvCode)
   role          = aws_iam_role.glue_crawler_role.arn
 
   jdbc_target {
