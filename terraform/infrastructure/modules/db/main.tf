@@ -105,38 +105,7 @@ module "db" {
   }
 }
 
-resource "aws_glue_connection" "example" {
-  name        = format("%s-%s-%s", var.Prefix, "rds", var.EnvCode)
-  description = "Glue connection to RDS PostgreSQL"
-  connection_type = "JDBC"
 
-  connection_properties = {
-    SECRET_ID = module.db.db_instance_master_user_secret_arn
-    JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}:${module.db.db_instance_port}/${var.DBInstanceDatabaseName}"
-  }
-
-
-  # Optional: VPC configuration
-  physical_connection_requirements {
-    security_group_id_list = [module.db.db_subnet_group_id]
-    subnet_id              =  [var.VPCDatabaseSubnetGroup]
-  }
-}
-
-resource "aws_glue_catalog_database" "main" {
-  name = module.db.db_instance_name
-}
-
-resource "aws_glue_crawler" "example" {
-  database_name = aws_glue_catalog_database.main.name
-  name          = "example"
-  role          = aws_iam_role.example.arn
-
-  jdbc_target {
-    connection_name = aws_glue_connection.example.name
-    path            = "database-name/%"
-  }
-}
 
 # module "kms" {
 #   source      = "terraform-aws-modules/kms/aws"
@@ -188,23 +157,6 @@ module "security_group" {
   tags = local.tags
 }
 
-data "aws_iam_policy_document" "glue" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "logs:PutLogEvents"
-    ]
-    resources = [
-      "*"
-    ]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "secretsmanager:GetSecretValue"
-    ]
-    resources = [
-      module.db.db_instance_master_user_secret_arn
-    ]
-  }
-}
+
+
+
