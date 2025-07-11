@@ -56,6 +56,7 @@ resource "aws_glue_connection" "example" {
   connection_type = "JDBC"
 
   connection_properties = {
+    JDBC_ENFORCE_SSL: "true"
     SECRET_ID = module.db.db_instance_master_user_secret_arn
     JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}:${module.db.db_instance_port}/${var.DBInstanceDatabaseName}?ssl=true&sslmode=verify-full"
   }
@@ -97,8 +98,8 @@ module "glue_security_group" {
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
-      to_port     = 0
-      protocol    = "tcp"
+      to_port     = 65535
+      protocol    = "-1"
       description = "glue access from within VPC"
       cidr_blocks = var.VPCCIDR
     },
