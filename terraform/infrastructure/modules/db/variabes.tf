@@ -16,9 +16,9 @@ variable "VPCID" {
   type        = string
 }
 
-variable "PublicSubnet" {
-  description = "ID of public subnet"
-  type = string
+variable "PublicSubnets" {
+  description = "IDs of public subnet"
+  type        = list(string)
 }
 
 # Networking

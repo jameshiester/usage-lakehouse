@@ -1,7 +1,7 @@
 resource "aws_iam_role" "glue_crawler_role" {
-  name               = format("%s-%s-%s", var.Prefix, "glue-rds", var.EnvCode)
+  name = format("%s-%s-%s", var.Prefix, "glue-rds", var.EnvCode)
 
-  
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -41,7 +41,7 @@ resource "aws_iam_role_policy" "glue_policy" {
       },
       {
         Action = [
-             "secretsmanager:GetSecretValue",
+          "secretsmanager:GetSecretValue",
         ]
         Effect   = "Allow"
         Resource = module.db.db_instance_master_user_secret_arn
@@ -51,21 +51,21 @@ resource "aws_iam_role_policy" "glue_policy" {
 }
 
 resource "aws_glue_connection" "example" {
-  name        = format("%s-%s-%s", var.Prefix, "rds", var.EnvCode)
-  description = "Glue connection to RDS PostgreSQL"
+  name            = format("%s-%s-%s", var.Prefix, "rds", var.EnvCode)
+  description     = "Glue connection to RDS PostgreSQL"
   connection_type = "JDBC"
 
   connection_properties = {
     # JDBC_ENFORCE_SSL: "true"
-    SECRET_ID = module.db.db_instance_master_user_secret_arn
+    SECRET_ID           = module.db.db_instance_master_user_secret_arn
     JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}/${var.DBInstanceDatabaseName}"
   }
 
 
   # Optional: VPC configuration
   physical_connection_requirements {
-    security_group_id_list = [module.security_group.security_group_id,module.glue_security_group.security_group_id]
-    subnet_id              =  var.PublicSubnet
+    security_group_id_list = [module.security_group.security_group_id, module.glue_security_group.security_group_id]
+    subnet_id              = var.PublicSubnet
   }
 }
 

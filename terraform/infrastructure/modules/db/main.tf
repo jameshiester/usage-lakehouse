@@ -74,7 +74,7 @@ module "db" {
   monitoring_role_name            = format("%s%s%s", var.Prefix, "rds-mintoring", var.EnvCode)
   monitoring_role_use_name_prefix = true
   monitoring_role_description     = "Monitoring role for RDS database"
-  apply_immediately = true
+  apply_immediately               = true
 
   parameters = [
     {
@@ -82,8 +82,8 @@ module "db" {
       value = 1
     },
     {
-      name  = "rds.logical_replication"
-      value = 1
+      name         = "rds.logical_replication"
+      value        = 1
       apply_method = "pending-reboot"
     },
     {

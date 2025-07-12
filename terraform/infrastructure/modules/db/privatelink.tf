@@ -5,11 +5,11 @@ resource "aws_lb_target_group" "rds_target_group" {
   vpc_id      = var.VPCID
   target_type = "ip"
   health_check {
-    enabled = true
-    interval = 10
-    port = module.db.db_instance_port
-    timeout = 10
-    protocol = "TCP"
+    enabled             = true
+    interval            = 10
+    port                = module.db.db_instance_port
+    timeout             = 10
+    protocol            = "TCP"
     unhealthy_threshold = 3
   }
 }
@@ -50,7 +50,7 @@ resource "aws_lb" "rds_lb" {
   name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
   internal                         = true
   load_balancer_type               = "network"
-  subnets                          = [var.PublicSubnet]
+  subnets                          = var.PublicSubnets
   enable_cross_zone_load_balancing = true
   tags                             = local.tags
 }
@@ -194,8 +194,8 @@ resource "aws_vpc_endpoint_service" "rds_lb_endpoint_service" {
   acceptance_required        = false
   network_load_balancer_arns = [aws_lb.rds_lb.arn]
 
-  supported_regions = [var.Region]
-  allowed_principals = ["firehose.amazonaws.com","glue.amazonaws.com"]
+  supported_regions  = [var.Region]
+  allowed_principals = ["firehose.amazonaws.com", "glue.amazonaws.com"]
 
   tags = {
     Name = format("%s-%s-%s", var.Prefix, "rds-endpoint", var.EnvCode)
@@ -203,11 +203,11 @@ resource "aws_vpc_endpoint_service" "rds_lb_endpoint_service" {
 }
 
 resource "aws_vpc_endpoint_service_allowed_principal" "allow_firehose" {
-  vpc_endpoint_service_id = "${aws_vpc_endpoint_service.rds_lb_endpoint_service.id}"
+  vpc_endpoint_service_id = aws_vpc_endpoint_service.rds_lb_endpoint_service.id
   principal_arn           = awscc_iam_role.firehose.arn
 }
 
 resource "aws_vpc_endpoint_service_allowed_principal" "allow_glue" {
-  vpc_endpoint_service_id = "${aws_vpc_endpoint_service.rds_lb_endpoint_service.id}"
+  vpc_endpoint_service_id = aws_vpc_endpoint_service.rds_lb_endpoint_service.id
   principal_arn           = aws_iam_role.glue_crawler_role.arn
 }
