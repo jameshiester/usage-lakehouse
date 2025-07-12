@@ -134,7 +134,7 @@ resource "aws_lb_target_group" "mswebapp" {
   }
 
   tags = {
-    Name  = format("%s%s%s%s", var.Region, "lbt", var.EnvCode, "mswebapp")
+    Name  = format("%s-%s-%s-%s", var.Region, "lbt", var.EnvCode, "mswebapp")
     rtype = "network"
   }
 }
