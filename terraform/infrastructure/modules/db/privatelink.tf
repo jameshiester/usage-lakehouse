@@ -1,3 +1,33 @@
+resource "aws_security_group" "lb" {
+  name        = format("%s-%s-%s", var.Prefix, "rds-lambda", var.EnvCode)
+  description = "Security Group for Lambda connected to RDS failover updates"
+  vpc_id      = var.VPCID
+
+  tags = {
+    Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
+    resourcetype = "security"
+    codeblock    = "network-3tier"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "postgres" {
+  security_group_id = aws_security_group.lb.id
+  description       = "postgres"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 5432
+  ip_protocol       = "tcp"
+  to_port           = 5432
+}
+
+resource "aws_vpc_security_group_egress_rule" "https" {
+  security_group_id = aws_security_group.lb.id
+  description       = "https"
+  cidr_ipv4         = "0.0.0.0/0"
+      from_port   = 0
+      to_port     = 65535
+      ip_protocol    = "-1"
+}
+
 resource "aws_lb_target_group" "rds_target_group" {
   name        = format("%s-%s-%s", var.Prefix, "db-listener", var.EnvCode)
   port        = module.db.db_instance_port
@@ -48,6 +78,7 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
 
 resource "aws_lb" "rds_lb" {
   name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
+  security_groups = [aws_security_group.lb.id]
   internal                         = true
   load_balancer_type               = "network"
   subnets                          = var.PublicSubnets
@@ -158,6 +189,8 @@ resource "aws_iam_role_policy" "lambda_execution_role_policy" {
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
         "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeNetworkInterfaces ",
         "logs:PutLogEvents",
         "rds:DescribeDBInstances",
         "elasticloadbalancing:DescribeTargetHealth",
