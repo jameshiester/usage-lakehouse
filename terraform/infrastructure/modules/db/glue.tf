@@ -48,8 +48,7 @@ resource "aws_iam_role_policy" "glue_policy" {
           "s3:DeleteObject"
         ],
         Resource = [
-          "arn:aws:s3:::glue-custom-jdbc-jh/*",
-          "arn:aws:s3:::glue-custom-jdbc-jh"
+          "*"
         ]
       },
       {
@@ -117,7 +116,7 @@ module "glue_security_group" {
     {
       from_port   = 0
       to_port     = 65535
-      protocol    = "-1"
+      protocol    = "TCP"
       description = "glue access from within VPC"
       cidr_blocks = "0.0.0.0/0"
     },

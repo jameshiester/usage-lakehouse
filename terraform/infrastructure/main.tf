@@ -69,7 +69,7 @@ resource "aws_vpc_security_group_egress_rule" "postgres" {
   description       = "postgres"
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 5432
-  ip_protocol       = "tcp"
+  ip_protocol       = "TCP"
   to_port           = 5432
 }
 
@@ -78,7 +78,7 @@ resource "aws_vpc_security_group_egress_rule" "https" {
   description       = "https"
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
-  ip_protocol       = "tcp"
+  ip_protocol       = "TCP"
   to_port           = 443
 }
 
