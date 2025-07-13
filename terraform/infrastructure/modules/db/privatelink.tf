@@ -10,7 +10,7 @@ resource "aws_security_group" "lb" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "postgres" {
+resource "aws_vpc_security_group_ingress_rule" "pg" {
   security_group_id = aws_security_group.lb.id
   description       = "postgres"
   cidr_ipv4         = "0.0.0.0/0"
@@ -19,7 +19,7 @@ resource "aws_vpc_security_group_ingress_rule" "postgres" {
   to_port           = 5432
 }
 
-resource "aws_vpc_security_group_egress_rule" "https" {
+resource "aws_vpc_security_group_egress_rule" "lb-all" {
   security_group_id = aws_security_group.lb.id
   description       = "https"
   cidr_ipv4         = "0.0.0.0/0"
