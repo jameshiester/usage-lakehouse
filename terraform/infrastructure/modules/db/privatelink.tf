@@ -1,6 +1,6 @@
 resource "aws_security_group" "lb" {
   name        = format("%s-%s-%s", var.Prefix, "rds-lb", var.EnvCode)
-  description = "Security Group for VPC Endpoint RDS LB"
+  description = "Security Group for VPC Endpoint LB"
   vpc_id      = var.VPCID
 
   tags = {
@@ -23,9 +23,9 @@ resource "aws_vpc_security_group_egress_rule" "lb-all" {
   security_group_id = aws_security_group.lb.id
   description       = "https"
   cidr_ipv4         = "0.0.0.0/0"
-      from_port   = 0
-      to_port     = 65535
-      ip_protocol    = "-1"
+  from_port         = 0
+  to_port           = 65535
+  ip_protocol       = "-1"
 }
 
 resource "aws_lb_target_group" "rds_target_group" {
@@ -78,7 +78,7 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
 
 resource "aws_lb" "rds_lb" {
   name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
-  security_groups = [aws_security_group.lb.id]
+  security_groups                  = [aws_security_group.lb.id]
   internal                         = true
   load_balancer_type               = "network"
   subnets                          = var.PublicSubnets
