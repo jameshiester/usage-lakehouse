@@ -100,7 +100,11 @@ resource "aws_lambda_function" "check_rds_ip" {
   filename = data.archive_file.lambda_zip.output_path
 
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
-
+  vpc_config {
+    subnet_ids                  = var.PrivateSubnets
+    security_group_ids          = [aws_security_group.lambda.id]
+    ipv6_allowed_for_dual_stack = true # Enable IPv6 support
+  }
   environment {
     variables = {
       Cluster_EndPoint = module.db.db_instance_endpoint
@@ -108,6 +112,36 @@ resource "aws_lambda_function" "check_rds_ip" {
       NLB_TG_ARN : aws_lb_target_group.rds_target_group.arn
     }
   }
+}
+
+resource "aws_security_group" "lambda" {
+  name        = format("%s-%s-%s", var.Prefix, "rds-lambda", var.EnvCode)
+  description = "Security Group for Lambda connected to RDS failover updates"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
+    resourcetype = "security"
+    codeblock    = "network-3tier"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "postgres" {
+  security_group_id = aws_security_group.lambda.id
+  description       = "postgres"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 5432
+  ip_protocol       = "tcp"
+  to_port           = 5432
+}
+
+resource "aws_vpc_security_group_egress_rule" "https" {
+  security_group_id = aws_security_group.lambda.id
+  description       = "https"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  ip_protocol       = "tcp"
+  to_port           = 443
 }
 
 # Create an IAM policy for the Lambda function

@@ -102,7 +102,7 @@ module "vpc_endpoints" {
       service             = "rds"
       private_dns_enabled = true
       subnet_ids          = module.vpc.private_subnets
-      security_group_ids  = [aws_security_group.rds.id]
+      security_group_ids  = [aws_security_group.lambda.id]
     },
     ssm = {
       service             = "ssm"
@@ -148,6 +148,7 @@ module "db" {
   EnvCode                    = var.EnvCode
   VPCCIDR                    = local.vpc_cidr
   PublicSubnets              = module.vpc.public_subnets
+  PrivateSubnets             = module.vpc.private_subnets
   AZS                        = local.azs
   EnvTag                     = var.EnvTag
 }

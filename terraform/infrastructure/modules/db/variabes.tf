@@ -17,7 +17,12 @@ variable "VPCID" {
 }
 
 variable "PublicSubnets" {
-  description = "IDs of public subnet"
+  description = "IDs of public subnets"
+  type        = list(string)
+}
+
+variable "PrivateSubnets" {
+  description = "IDs of private subnets"
   type        = list(string)
 }
 
