@@ -12,6 +12,7 @@ data "aws_iam_policy_document" "SampleApp" {
       "cloudformation:UpdateResource",
       "ec2:AcceptVpcEndpointConnections",
       "ec2:AssociateVpcCidrBlock",
+      "ec2:ModifySecurityGroupRules",
       "ec2:CreateEgressOnlyInternetGateway",
       "ec2:CreateTags",
       "glue:CreateDatabase",
