@@ -40,6 +40,19 @@ resource "aws_iam_role_policy" "glue_policy" {
         Resource = "*"
       },
       {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        Resource = [
+          "arn:aws:s3:::glue-custom-jdbc-jh/*",
+          "arn:aws:s3:::glue-custom-jdbc-jh"
+        ]
+      },
+      {
         Action = [
           "secretsmanager:GetSecretValue",
         ]
@@ -56,15 +69,17 @@ resource "aws_glue_connection" "example" {
   connection_type = "JDBC"
 
   connection_properties = {
-    # JDBC_ENFORCE_SSL: "true"
-    SECRET_ID           = module.db.db_instance_master_user_secret_arn
-    JDBC_CONNECTION_URL = "jdbc:postgresql://${module.db.db_instance_endpoint}/${var.DBInstanceDatabaseName}"
+    JDBC_ENFORCE_SSL       = "false"
+    JDBC_DRIVER_CLASS_NAME = "org.postgresql.Driver"
+    JDBC_DRIVER_JAR_URI    = "s3://glue-custom-jdbc-jh/postgresql-42.7.7.jar"
+    SECRET_ID              = module.db.db_instance_master_user_secret_arn
+    JDBC_CONNECTION_URL    = "jdbc:postgresql://${module.db.db_instance_endpoint}/${var.DBInstanceDatabaseName}"
   }
 
 
   # Optional: VPC configuration
   physical_connection_requirements {
-    security_group_id_list = [ module.glue_security_group.security_group_id]
+    security_group_id_list = [module.glue_security_group.security_group_id]
     subnet_id              = var.PrivateSubnets[0]
   }
 }

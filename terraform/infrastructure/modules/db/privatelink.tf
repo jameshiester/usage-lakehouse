@@ -157,6 +157,7 @@ resource "aws_iam_role_policy" "lambda_execution_role_policy" {
       "Action": [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
+        "ec2:CreateNetworkInterface",
         "logs:PutLogEvents",
         "rds:DescribeDBInstances",
         "elasticloadbalancing:DescribeTargetHealth",
