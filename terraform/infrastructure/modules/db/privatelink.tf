@@ -117,7 +117,7 @@ resource "aws_lambda_function" "check_rds_ip" {
 resource "aws_security_group" "lambda" {
   name        = format("%s-%s-%s", var.Prefix, "rds-lambda", var.EnvCode)
   description = "Security Group for Lambda connected to RDS failover updates"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.VPCID
 
   tags = {
     Name         = format("%s%s%s-%s", var.Prefix, "scg", var.EnvCode, "lambda")
