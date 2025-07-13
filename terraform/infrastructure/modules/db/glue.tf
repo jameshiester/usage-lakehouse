@@ -78,7 +78,7 @@ resource "aws_glue_connection" "example" {
 
   # Optional: VPC configuration
   physical_connection_requirements {
-    security_group_id_list = [module.glue_security_group.security_group_id,module.security_group.id]
+    security_group_id_list = [module.glue_security_group.security_group_id,module.security_group.security_group_id]
     subnet_id              = var.PrivateSubnets[0]
   }
 }
