@@ -25,7 +25,7 @@ resource "aws_vpc_security_group_egress_rule" "lb-all" {
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 0
   to_port           = 65535
-  ip_protocol       = "-1"
+  ip_protocol       = "tcp"
 }
 
 resource "aws_lb_target_group" "rds_target_group" {
