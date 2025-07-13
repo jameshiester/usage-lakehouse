@@ -1,6 +1,6 @@
 resource "aws_security_group" "lb" {
-  name        = format("%s-%s-%s", var.Prefix, "rds-lambda", var.EnvCode)
-  description = "Security Group for Lambda connected to RDS failover updates"
+  name        = format("%s-%s-%s", var.Prefix, "rds-lb", var.EnvCode)
+  description = "Security Group for VPC Endpoint RDS LB"
   vpc_id      = var.VPCID
 
   tags = {
