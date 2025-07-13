@@ -79,6 +79,7 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
 resource "aws_lb" "rds_lb" {
   name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
   security_groups                  = [aws_security_group.lb.id]
+  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
   internal                         = true
   load_balancer_type               = "network"
   subnets                          = var.PublicSubnets

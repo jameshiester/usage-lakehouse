@@ -155,6 +155,23 @@ module "security_group" {
       description = "PostgreSQL access from within VPC"
       cidr_blocks = var.VPCCIDR
     },
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "HTTPS access from within VPC"
+      cidr_blocks = var.VPCCIDR
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+        {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "HTTPS access from within VPC"
+      cidr_blocks = "0.0.0.0/0"
+    }
   ]
 
   tags = local.tags
