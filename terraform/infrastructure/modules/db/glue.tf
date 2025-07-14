@@ -35,6 +35,7 @@ resource "aws_iam_role_policy" "glue_policy" {
       {
         Action = [
           "logs:PutLogEvents",
+          "ec2:DescribeVpcEndpoints", "ec2:DescribeRouteTables", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeNetworkInterfaces", "ec2:DescribeSecurityGroups", "ec2:DescribeSubnets", "ec2:DescribeVpcAttribute",
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -78,7 +79,7 @@ resource "aws_glue_connection" "example" {
 
   # Optional: VPC configuration
   physical_connection_requirements {
-    security_group_id_list = [module.glue_security_group.security_group_id,module.security_group.security_group_id]
+    security_group_id_list = [module.glue_security_group.security_group_id, module.security_group.security_group_id]
     subnet_id              = var.PrivateSubnets[0]
   }
 }

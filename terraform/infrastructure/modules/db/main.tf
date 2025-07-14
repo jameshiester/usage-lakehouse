@@ -165,13 +165,13 @@ module "security_group" {
   ]
 
   egress_with_cidr_blocks = [
-        {
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      description = "HTTPS access from within VPC"
+    {
+      from_port   = 0
+      to_port     = 65535
+      protocol    = "TCP"
+      description = "glue access from within VPC"
       cidr_blocks = "0.0.0.0/0"
-    }
+    },
   ]
 
   tags = local.tags

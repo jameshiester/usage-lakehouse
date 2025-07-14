@@ -77,14 +77,14 @@ resource "aws_lb_target_group_attachment" "rds_target_group_attachment" {
 }
 
 resource "aws_lb" "rds_lb" {
-  name                             = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
-  security_groups                  = [aws_security_group.lb.id]
+  name                                                         = format("%s-%s-%s", var.Prefix, "db-lb", var.EnvCode)
+  security_groups                                              = [aws_security_group.lb.id]
   enforce_security_group_inbound_rules_on_private_link_traffic = "off"
-  internal                         = true
-  load_balancer_type               = "network"
-  subnets                          = var.PublicSubnets
-  enable_cross_zone_load_balancing = true
-  tags                             = local.tags
+  internal                                                     = true
+  load_balancer_type                                           = "network"
+  subnets                                                      = var.PublicSubnets
+  enable_cross_zone_load_balancing                             = true
+  tags                                                         = local.tags
 }
 
 # Create listeners for each RDS instance, mapping each to its respective target group
