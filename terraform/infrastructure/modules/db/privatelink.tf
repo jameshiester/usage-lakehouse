@@ -190,6 +190,7 @@ resource "aws_iam_role_policy" "lambda_execution_role_policy" {
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
         "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
         "ec2:DeleteNetworkInterface",
         "ec2:DescribeNetworkInterfaces ",
         "logs:PutLogEvents",
