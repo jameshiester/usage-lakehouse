@@ -34,8 +34,21 @@ resource "aws_iam_role_policy" "glue_policy" {
     Statement = [
       {
         Action = [
+          "cloudwatch:PutMetricData",
+          "ec2:CreateNetworkInterface", 
+          "ec2:CreateTags", 
+          "ec2:DeleteNetworkInterface", 
+          "ec2:DeleteTags",
+          "ec2:DescribeNetworkInterfaces", 
+          "ec2:DescribeRouteTables", 
+          "ec2:DescribeSecurityGroups", 
+          "ec2:DescribeSubnets", 
+          "ec2:DescribeVpcAttribute",
+          "ec2:DescribeVpcEndpoints", 
+          "logs:CreateLogGroup", 
+          "logs:CreateLogStream", 
           "logs:PutLogEvents",
-          "ec2:DescribeVpcEndpoints", "ec2:DescribeRouteTables", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeNetworkInterfaces", "ec2:DescribeSecurityGroups", "ec2:DescribeSubnets", "ec2:DescribeVpcAttribute",
+          "logs:PutLogEvents"
         ]
         Effect   = "Allow"
         Resource = "*"

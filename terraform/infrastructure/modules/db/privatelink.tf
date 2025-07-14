@@ -135,7 +135,6 @@ resource "aws_lambda_function" "check_rds_ip" {
   vpc_config {
     subnet_ids                  = var.PrivateSubnets
     security_group_ids          = [aws_security_group.lambda.id]
-    ipv6_allowed_for_dual_stack = true # Enable IPv6 support
   }
   environment {
     variables = {
